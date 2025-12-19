@@ -1,30 +1,69 @@
-name: Autograding Tests
+name: Java CI with Testing and Code Analysis
 'on':
   - push
+  - pull_request
   - repository_dispatch
 permissions:
   checks: write
   actions: read
   contents: read
 jobs:
-  run-autograding-tests:
+  test-and-analyze:
     runs-on: ubuntu-latest
     if: github.actor != 'github-classroom[bot]'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Test 1
-        id: test-1
-        uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Test 1
-          setup-command: mvn compile
-          command: mvn test
-          timeout: 10
-          max-score: 10
+          fetch-depth: 0  # 获取完整历史记录，SonarCloud需要
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'  # 根据您的项目需求调整版本
+          distribution: 'temurin'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Run all tests for coverage
+        run: |
+          # 运行所有测试以生成覆盖率报告
+          mvn clean test jacoco:report  # 假设使用JaCoCo进行覆盖率分析
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          # 添加额外的SonarCloud参数（可选）
+          args: >
+            -Dsonar.projectKey=shaoyang-chen-ics4u1-01-25_ics4u-culminating-analysis-repo
+            -Dsonar.organization=Shaoyang Chen
+            -Dsonar.java.coveragePlugin=jacoco
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+
+      - name: Codacy Analysis
+        uses: codacy/codacy-analysis-cli-action@master
+        with:
+          project-token: ${{ EMU48FbNcPuZdywC4zSj }}
+          verbose: true
+          # 指定分析工具（根据您的项目选择）
+          tool: checkstyle,pmd,findbugs,jacoco
+
+      - name: Upload test results to Codacy
+        run: |
+          # 上传覆盖率报告到Codacy
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r target/site/jacoco/jacoco.xml
+
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          TEST-1_RESULTS: "${{steps.test-1.outputs.result}}"
+          TEST-1_RESULTS: "${{steps.specific-test.outputs.result}}"
         with:
-          runners: test-1
+          runners: specific-test
