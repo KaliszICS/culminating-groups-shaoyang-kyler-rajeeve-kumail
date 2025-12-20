@@ -6,10 +6,10 @@ public class FiveStarCharacter extends PlayableCharacter {
 
     public FiveStarCharacter() {
         super();
-        this.signatureWeapon = "专属光锥";
-        this.ultimateAnimation = "华丽终结技动画";
+        this.signatureWeapon = "Signature LightCone";
+        this.ultimateAnimation = "Ultimate Animation";
 
-        // 五星角色初始属性更高
+        // 5 star charas have better base attributes
         maxHP += 50;
         currentHP = maxHP;
         attack += 10;
@@ -19,10 +19,10 @@ public class FiveStarCharacter extends PlayableCharacter {
 
     public FiveStarCharacter(String name) {
         super(name, 1, true);
-        this.signatureWeapon = name + "的专属光锥";
-        this.ultimateAnimation = name + "的终结技动画";
+        this.signatureWeapon = name + "'s Signature LightCone";
+        this.ultimateAnimation = name + "'s Ultimate Animation";
 
-        // 五星角色初始属性更高
+        // 5 star charas have better base attributes
         maxHP += 50;
         currentHP = maxHP;
         attack += 10;
@@ -36,38 +36,38 @@ public class FiveStarCharacter extends PlayableCharacter {
     }
 
     public void useUltimate() {
-        System.out.println(name + " 发动终结技！");
-        System.out.println("播放动画: " + ultimateAnimation);
-        System.out.println("使用专属武器: " + signatureWeapon);
+        System.out.println(name + " Used Ultimate Skill!");
+        System.out.println("Animation: " + ultimateAnimation);
+        System.out.println("Used Signature LightCone: " + signatureWeapon);
 
-        // 终结技效果：造成大量伤害
+        // Ultimate Skill will cause extra damage
         int ultimateDamage = attack * 3;
-        System.out.println("造成 " + ultimateDamage + " 点终结技伤害！");
+        System.out.println("Caused " + ultimateDamage + " damage with Ultimate Skill!");
     }
+    public String getSignatureWeapon() { return signatureWeapon; }
+    public void setSignatureWeapon(String signatureWeapon) { this.signatureWeapon = signatureWeapon; }
+    public String getUltimateAnimation() { return ultimateAnimation; }
+    public void setUltimateAnimation(String ultimateAnimation) { this.ultimateAnimation = ultimateAnimation; }
 
     @Override
     public void useSkill() {
-        System.out.println(name + "（五星）发动强力技能！");
-        // 五星角色的技能更强
+        System.out.println(name + "(5★) used Skill!");
+        // 5★ have better skills
     }
 
     @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("稀有度: ★★★★★");
-        System.out.println("专属武器: " + signatureWeapon);
-        System.out.println("终结技动画: " + ultimateAnimation);
+        System.out.println("Rarity: ★★★★★");
+        System.out.println("Signature LightCone: " + signatureWeapon);
+        System.out.println("Ultimate Animation: " + ultimateAnimation);
     }
 
     @Override
     public String toCSVFormat() {
-        return super.toCSVFormat() + String.format(",★★★★★,\"%s\",\"%s\"",
-                signatureWeapon, ultimateAnimation);
+        String escapedWeapon = signatureWeapon.replace("\"", "\"\"");
+        String escapedAnimation = ultimateAnimation.replace("\"", "\"\"");
+        String var = ",★★★★★,\"" + escapedWeapon + "\",\"" + escapedAnimation + "\"";
+        return super.toCSVFormat() + var;
     }
-
-    // Getter 和 Setter
-    public String getSignatureWeapon() { return signatureWeapon; }
-    public void setSignatureWeapon(String signatureWeapon) { this.signatureWeapon = signatureWeapon; }
-    public String getUltimateAnimation() { return ultimateAnimation; }
-    public void setUltimateAnimation(String ultimateAnimation) { this.ultimateAnimation = ultimateAnimation; }
 }

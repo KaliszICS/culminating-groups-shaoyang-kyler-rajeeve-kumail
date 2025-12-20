@@ -24,44 +24,45 @@ public class PlayableCharacter extends Character {
         this.friendshipLevel = 1;
     }
 
+    public boolean isPlayerControlled() { return isPlayerControlled; }
+    public void setPlayerControlled(boolean playerControlled) { isPlayerControlled = playerControlled; }
+    public int getFriendshipLevel() { return friendshipLevel; }
+    public void setFriendshipLevel(int friendshipLevel) { this.friendshipLevel = friendshipLevel; }
+
     public void switchControl() {
         isPlayerControlled = !isPlayerControlled;
-        System.out.println(name + " 的控制状态已切换为: " +
-                (isPlayerControlled ? "玩家控制" : "AI控制"));
+        System.out.println(name + "'s state has changed to: " +
+                (isPlayerControlled ? "Player Controlled" : "Program Controlled"));
     }
 
     public void increaseFriendship() {
         friendshipLevel++;
-        System.out.println(name + " 的好感度提升到 " + friendshipLevel + " 级！");
+        System.out.println(name + "'s friendship level increased to level: " + friendshipLevel + "!");
 
-        // 好感度奖励
+        // Friendship rewards
         if (friendshipLevel % 5 == 0) {
-            attack += 5;
-            System.out.println("获得好感度奖励：攻击力+5");
+            attack += 10;
+            defense += 5;
+            System.out.println("Received friendship reward：ATK + 10, DEF + 5 permanently!");
         }
     }
 
     public void increaseFriendship(int amount) {
         friendshipLevel += amount;
-        System.out.println(name + " 的好感度提升 " + amount + " 点，当前 " + friendshipLevel + " 级！");
+        System.out.println(name + "'s friendship increased to " + amount + " points, current friendship level is: " + friendshipLevel);
     }
 
     @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("控制状态: " + (isPlayerControlled ? "玩家控制" : "AI控制"));
-        System.out.println("好感度等级: " + friendshipLevel);
+        System.out.println("Control State:  " + (isPlayerControlled ? "Played Controlled" : "Program Controlled"));
+        System.out.println("Friendship level: " + friendshipLevel);
     }
 
     @Override
     public String toCSVFormat() {
-        return super.toCSVFormat() + String.format(",%d,%b,%d",
-                level, isPlayerControlled, friendshipLevel);
+        String var = "," + level + "," + isPlayerControlled + "," + friendshipLevel;
+        return super.toCSVFormat() + var;
     }
 
-    // Getter 和 Setter
-    public boolean isPlayerControlled() { return isPlayerControlled; }
-    public void setPlayerControlled(boolean playerControlled) { isPlayerControlled = playerControlled; }
-    public int getFriendshipLevel() { return friendshipLevel; }
-    public void setFriendshipLevel(int friendshipLevel) { this.friendshipLevel = friendshipLevel; }
 }

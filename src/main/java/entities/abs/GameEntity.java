@@ -7,7 +7,7 @@ public abstract class GameEntity implements Displayable {
     protected int id;
     protected String description;
 
-    // 静态变量用于自动生成ID
+    // static var to generate id
     protected static int nextId = 1;
 
     public GameEntity() {
@@ -25,7 +25,7 @@ public abstract class GameEntity implements Displayable {
         }
     }
 
-    // 带描述的构造函数
+    // constructor with description
     public GameEntity(String name, int id, String description) {
         this(name, id);
         this.description = description;
@@ -53,6 +53,6 @@ public abstract class GameEntity implements Displayable {
 
     @Override
     public String toCSVFormat() {
-        return String.format("%d,%s,\"%s\"", id, name, description.replace("\"", "\"\""));
+        return id + "," + name + ",\"" + description.replace("\"", "\"\"") + "\"";
     }
 }

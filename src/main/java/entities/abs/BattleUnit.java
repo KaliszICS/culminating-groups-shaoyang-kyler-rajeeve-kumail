@@ -33,31 +33,6 @@ public abstract class BattleUnit extends GameEntity {
         this.defense = defense;
         this.speed = speed;
     }
-
-    public void attack(BattleUnit target) {
-        if (target == null) {
-            System.out.println(name + " 尝试攻击，但没有目标！");
-            return;
-        }
-
-        int damage = Math.max(attack - target.defense, 1);
-        System.out.println(name + " 对 " + target.name + " 造成 " + damage + " 点伤害！");
-        target.takeDamage(damage);
-    }
-
-    public void takeDamage(int damage) {
-        currentHP = Math.max(currentHP - damage, 0);
-        System.out.println(name + " 受到 " + damage + " 点伤害，剩余HP: " + currentHP);
-
-        if (currentHP <= 0) {
-            System.out.println(name + " 被击败了！");
-        }
-    }
-
-    // 抽象方法 - 使用技能
-    public abstract void useSkill();
-
-    // Getter 和 Setter 方法
     public int getMaxHP() { return maxHP; }
     public void setMaxHP(int maxHP) {
         this.maxHP = maxHP;
@@ -80,18 +55,40 @@ public abstract class BattleUnit extends GameEntity {
     public int getSpeed() { return speed; }
     public void setSpeed(int speed) { this.speed = speed; }
 
+    public void attack(BattleUnit target) {
+        if (target == null) {
+            System.out.println(name + " Tried to attack, but target is null.");
+            return;
+        }
+
+        int damage = Math.max(attack - target.defense, 1);
+        System.out.println(name + " Caused " + damage + " to " + target.name + "!");
+        target.takeDamage(damage);
+    }
+
+    public void takeDamage(int damage) {
+        currentHP = Math.max(currentHP - damage, 0);
+        System.out.println(name + " take " + damage + " damage, remaining HP: " + currentHP);
+
+        if (currentHP <= 0) {
+            System.out.println(name + " is dead!");
+        }
+    }
+
+    public abstract void useSkill();
+
     public boolean isAlive() {
         return currentHP > 0;
     }
 
     public void heal(int amount) {
         currentHP = Math.min(currentHP + amount, maxHP);
-        System.out.println(name + " 恢复了 " + amount + " 点HP，当前HP: " + currentHP);
+        System.out.println(name + " healed " + amount + " HP, current HP: " + currentHP);
     }
 
     @Override
     public String toCSVFormat() {
-        return super.toCSVFormat() + String.format(",%d,%d,%d,%d,%d",
-                maxHP, currentHP, attack, defense, speed);
+        String text = maxHP + "," +  currentHP+ "," +  attack+ "," + defense+ "," + speed;
+        return super.toCSVFormat() + text;
     }
 }

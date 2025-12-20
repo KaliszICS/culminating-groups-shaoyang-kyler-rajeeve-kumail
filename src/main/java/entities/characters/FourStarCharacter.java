@@ -7,7 +7,7 @@ public class FourStarCharacter extends PlayableCharacter {
         super();
         this.canBeObtainedFree = true;
 
-        // 四星角色初始属性适中
+        // 4★ have standard level of attributes
         maxHP += 20;
         currentHP = maxHP;
         attack += 5;
@@ -19,7 +19,7 @@ public class FourStarCharacter extends PlayableCharacter {
         super(name, 1, true);
         this.canBeObtainedFree = freeObtainable;
 
-        // 四星角色初始属性适中
+        // 4★ have standard level of attributes
         maxHP += 20;
         currentHP = maxHP;
         attack += 5;
@@ -32,34 +32,34 @@ public class FourStarCharacter extends PlayableCharacter {
         this.canBeObtainedFree = freeObtainable;
     }
 
+    public boolean isCanBeObtainedFree() { return canBeObtainedFree; }
+    public void setCanBeObtainedFree(boolean canBeObtainedFree) { this.canBeObtainedFree = canBeObtainedFree; }
+
     public boolean checkAvailability() {
         if (canBeObtainedFree) {
-            System.out.println(name + " 可以通过免费方式获得");
+            System.out.println(name + " Can be obtained as a free character");
         } else {
-            System.out.println(name + " 只能通过特定活动或祈愿获得");
+            System.out.println(name + " only a UP character");
         }
         return canBeObtainedFree;
     }
 
     @Override
     public void useSkill() {
-        System.out.println(name + "（四星）发动实用技能！");
+        System.out.println(name + "(4★) used Skill!");
         // 四星角色的技能实用性强
     }
 
     @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("稀有度: ★★★★");
-        System.out.println("免费获取: " + (canBeObtainedFree ? "是" : "否"));
+        System.out.println("Rarity: ★★★★");
+        System.out.println("Free Obtain: " + (canBeObtainedFree ? "True" : "False"));
     }
 
     @Override
     public String toCSVFormat() {
-        return super.toCSVFormat() + String.format(",★★★★,%b", canBeObtainedFree);
+        String var = ",★★★★," + canBeObtainedFree;
+        return super.toCSVFormat() + var;
     }
-
-    // Getter 和 Setter
-    public boolean isCanBeObtainedFree() { return canBeObtainedFree; }
-    public void setCanBeObtainedFree(boolean canBeObtainedFree) { this.canBeObtainedFree = canBeObtainedFree; }
 }
