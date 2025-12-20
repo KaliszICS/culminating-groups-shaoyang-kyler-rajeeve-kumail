@@ -7,7 +7,7 @@
 To Do | Completion? | Owners
 :------------ | :------------- | :-------------  
 Entities Package | :heavy_check_mark: | Shaoyang
-Gacha Package | :factory_worker: | Shaoyang
+Gacha Package | :heavy_check_mark: | Shaoyang
 Battle Package | :factory_worker: | Kumail
 AI Package | :factory_worker: | Kumail
 Inventory Package | :factory_worker: | Shaoyang
