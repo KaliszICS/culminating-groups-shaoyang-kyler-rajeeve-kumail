@@ -3,7 +3,36 @@
 
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=22077330)
 
-**UML (updated on 25/12/18 Version 1.1)**
+**To Do List:**
+To Do | Completion? | Owners
+:------------ | :------------- | :-------------  
+Items Package | :heavy_check_mark: | Shaoyang
+Abstract Package | :heavy_check_mark: | Shaoyang
+Characters Package | :heavy_check_mark: | Shaoyang
+Enemies Package | :heavy_check_mark:  | Shaoyang
+Gacha Package | :factory_worker: | Shaoyang
+Battle Package | :factory_worker: | Kumail
+AI Package | :factory_worker: | Kumail
+Inventory Package | :factory_worker: | Shaoyang
+Config Package | :factory_worker: | Kyler
+Save Package | :factory_worker: | Kyler
+FileIO Package | :factory_worker: | Rajeeve
+Algorithms Package | :factory_worker: | Rajeeve
+Character Data | :thinking: | Not Assigned Yet
+Gameplay | :thinking:  | Not Assigned Yet
+
+Legend
+- :white_check_mark: Means 100% completed
+
+- :heavy_check_mark: Means mostly completed with minor updates left
+
+- :factory_worker: Means work in progress
+
+- :thinking: Means still planning
+
+
+
+**UML (updated on 25/12/19 Version 1.2)**
 ![UML Diagram of Project](https://cdn.us1.chensao.cc/svg/plantuml-diagram1.2.svg)
 
 
