@@ -173,7 +173,7 @@ public class BattleSystem {
         }
         return null;  //for when no target found ig
     }
-    // //getters for UI/tests if needed (I will delete if not)
+    // //getters for UI/tests if needed (I will delete if not needed)
     // public BattleUnit[][] getBattleGrid() {
     //     return battleGrid;
     // }
