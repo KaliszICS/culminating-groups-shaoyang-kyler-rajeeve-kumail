@@ -1,7 +1,7 @@
 package systems.battle;
 import java.util.Random;
 
-//tell me if you guys awant to add or not add things because im not really sure what should/shouldnt be here
+//tell me if you guys want to add or not add things because im not really sure what should/shouldnt be here
 public final class Damage{
     private static final Random RNG = new Random();
     private Damage() {}
@@ -26,9 +26,9 @@ public final class Damage{
         if (v<0) {
             return 0;
         }
-        if (v>0) {
+        if (v>1) {
             return 1;
         }
+        return v;
     }
-
 }
