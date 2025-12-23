@@ -55,7 +55,7 @@ public class PlayableCharacter extends Character {
     @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("Control State:  " + (isPlayerControlled ? "Played Controlled" : "Program Controlled"));
+        System.out.println("Control State:  " + (isPlayerControlled ? "Player" : "Program") + " Controlled");
         System.out.println("Friendship level: " + friendshipLevel);
     }
 

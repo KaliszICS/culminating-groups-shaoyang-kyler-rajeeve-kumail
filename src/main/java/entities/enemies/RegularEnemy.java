@@ -61,7 +61,7 @@ public class RegularEnemy extends Enemy {
     public void displayInfo() {
         super.displayInfo();
         System.out.println("Enemy type: " + (isElite ? "Elite" : "Regular"));
-        System.out.println("Can call reinforcement: " + (canCallReinforcements ? "True" : "False"));
+        System.out.println("Can call reinforcement: " + canCallReinforcements);
     }
 
     @Override

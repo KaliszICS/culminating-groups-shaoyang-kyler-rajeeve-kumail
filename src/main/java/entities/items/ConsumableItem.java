@@ -7,11 +7,11 @@ public class ConsumableItem extends Item {
     public ConsumableItem() {
         super();
         this.usesRemaining = 3;
-        this.effectDuration = 30; // 30秒效果持续时间
+        this.effectDuration = 30; // 30s duration
     }
 
     public ConsumableItem(String name, int uses) {
-        super(name, 50); // 消耗品基础价值50
+        super(name, 50); // base value 50
         this.usesRemaining = uses;
         this.effectDuration = 30;
     }
@@ -22,62 +22,59 @@ public class ConsumableItem extends Item {
         this.effectDuration = duration;
     }
 
+    public int getUsesRemaining() { return usesRemaining; }
+    public void setUsesRemaining(int usesRemaining) { this.usesRemaining = usesRemaining; }
+    public int getEffectDuration() { return effectDuration; }
+    public void setEffectDuration(int effectDuration) { this.effectDuration = effectDuration; }
+
     @Override
     public void use() {
         if (usesRemaining <= 0) {
-            System.out.println(name + " 已经用完了！");
+            System.out.println(name + " is used up!");
             return;
         }
-
         usesRemaining--;
-        System.out.println("使用了 " + name);
-        System.out.println("效果持续: " + effectDuration + " 秒");
-        System.out.println("剩余使用次数: " + usesRemaining);
-
-        // 不同类型的消耗品效果
-        if (name.contains("治疗")) {
-            System.out.println("恢复生命值！");
-        } else if (name.contains("攻击")) {
-            System.out.println("增加攻击力！");
-        } else if (name.contains("防御")) {
-            System.out.println("增加防御力！");
-        } else if (name.contains("速度")) {
-            System.out.println("增加速度！");
+        System.out.println("Used " + name);
+        System.out.println("Effect Duration: " + effectDuration + " seconds");
+        System.out.println("Uses remaining: " + usesRemaining);
+        // different effects
+        if (name.contains("Heal")) {
+            System.out.println("Heal HP");
+        } else if (name.contains("Attack")) {
+            System.out.println("Increase Attack!");
+        } else if (name.contains("Defense")) {
+            System.out.println("Increase Defense!");
+        } else if (name.contains("Speed")) {
+            System.out.println("Increase Speed!");
         }
     }
-
     public void refill() {
-        refill(3); // 默认补充3次
+        refill(3); // default
     }
 
     public void refill(int amount) {
         usesRemaining += amount;
-        System.out.println(name + " 补充了 " + amount + " 次使用次数");
-        System.out.println("当前剩余次数: " + usesRemaining);
+        System.out.println(name + " refilled " + amount + " uses");
+        System.out.println("Current uses remaining " + usesRemaining);
     }
 
     public void increaseDuration(int seconds) {
         effectDuration += seconds;
-        System.out.println(name + " 效果持续时间增加 " + seconds + " 秒");
-        System.out.println("总持续时间: " + effectDuration + " 秒");
+        System.out.println(name + " increased effect duration by " + seconds + " seconds");
+        System.out.println("Total Duration: " + effectDuration + " seconds");
     }
 
     @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("类型: 消耗品");
-        System.out.println("剩余使用次数: " + usesRemaining);
-        System.out.println("效果持续时间: " + effectDuration + " 秒");
+        System.out.println("Type: ConsumableItem");
+        System.out.println("Uses Remaining " + usesRemaining);
+        System.out.println("Effect Duration " + effectDuration + " Seconds");
     }
 
     @Override
     public String toCSVFormat() {
-        return super.toCSVFormat() + String.format(",消耗品,%d,%d", usesRemaining, effectDuration);
+        String str = ",ConsumableItem," + usesRemaining + "," + effectDuration;
+        return super.toCSVFormat() + str;
     }
-
-    // Getter 和 Setter
-    public int getUsesRemaining() { return usesRemaining; }
-    public void setUsesRemaining(int usesRemaining) { this.usesRemaining = usesRemaining; }
-    public int getEffectDuration() { return effectDuration; }
-    public void setEffectDuration(int effectDuration) { this.effectDuration = effectDuration; }
 }

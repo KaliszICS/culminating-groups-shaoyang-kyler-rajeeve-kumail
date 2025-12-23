@@ -106,7 +106,7 @@ public class BossEnemy extends Enemy {
     @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("Boss type: " + (hasPhases ? "Multi-phase boss" : "Single-phase boss"));
+        System.out.println("Boss type: " + (hasPhases ? "Multi-phase" : "Single-phase") + " boss");
         System.out.println("Current phase: " + currentPhase + "/" + phaseMessages.length);
     }
 
