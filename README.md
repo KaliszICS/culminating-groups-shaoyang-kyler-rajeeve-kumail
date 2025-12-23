@@ -8,8 +8,8 @@ To Do | Completion? | Owners
 :------------ | :------------- | :-------------  
 Entities Package | :heavy_check_mark: | Shaoyang
 Gacha Package | :heavy_check_mark: | Shaoyang
-Battle Package | :factory_worker: | Kumail
-AI Package | :factory_worker: | Kumail
+Battle Package | :heavy_check_mark: | Kumail
+AI Package | :heavy_check_mark: | Kumail
 Inventory Package | :factory_worker: | Shaoyang
 Config Package | :factory_worker: | Kyler
 Save Package | :factory_worker: | Kyler
