@@ -3,14 +3,15 @@ import java.util.List;
 import java.util.ArrayList;
 import entities.abs.BattleUnit;
 import entities.characters.Character;
+import entities.equipment.Equipment;
 import entities.enemies.Enemy;
 
 public class BattleSystem {
     private final BattleUnit[][] battleGrid = new BattleUnit[2][4];
     private final List<BattleUnit> turnOrder = new ArrayList<>();
     private int currentTurn=0;
-    private String battleState = "PREPARE"; //when it just starts (PREPARE), then IN_PROGRESS, WON, LOST, or DRAW
-
+    private String battleState = "PREPARE"; //when it just starts (PREPARE)
+                                            //other states: IN_PROGRESS, WON, or LOST
     public BattleSystem() {}
 
     public void initializeBattle(List<Character> playerTeam, List<Enemy> enemies) {
@@ -59,8 +60,10 @@ public class BattleSystem {
             advanceTurn();
             return;
         }
-
-        int dmg = Damage.compute(acting.getAttack(), target.getDefense(), 0.0, 0.0);
+        //damage calculatio
+        double crit = critRateOf(acting);
+        double critDmg = critDmgOf(acting);
+        int dmg = Damage.compute(acting.getAttack(), target.getDefense(), crit, critDmg);
         target.setCurrentHP(Math.max(0, target.getCurrentHP() - dmg));
 
         if (checkBattleEnd()) {
@@ -135,7 +138,9 @@ public class BattleSystem {
         } else {
             multi = 1.0;
         }
-        int base = Damage.compute(unit.getAttack(), target.getDefense(), 0.0, 0.0);
+        double crit = critRateOf(unit);
+        double critDmg = critDmgOf(unit);
+        int base = Damage.compute(unit.getAttack(), target.getDefense(), crit, critDmg);
         int dmg = (int)Math.floor(base*multi);
         target.setCurrentHP(Math.max(0, target.getCurrentHP() - Math.max(0, dmg)));
 
@@ -173,6 +178,61 @@ public class BattleSystem {
         }
         return null;  //for when no target found ig
     }
+
+    private double critRateOf(BattleUnit u)  {
+        double rate = 0.0;  //0.0is 0% and 1.0 is 100%
+        if(u instanceof Character) {
+            Character c = (Character) u;
+            Equipment[] gear = c.getEquippedItems();
+            if (gear != null) {
+                for (int i=0; i<gear.length; i++) {
+                    Equipment e = gear[i];
+                    if (e==null) {
+                        continue;
+                    }
+                    rate += percentToFraction(e.getStat("critical_rate"));  //takes int percent like 5 would be 5%
+                }
+            }
+        } else if (u instanceof Enemy) {
+            rate += 0.05; //default TBD
+        }
+        if (rate < 0.0) {
+            rate = 0.0;
+        }
+        if (rate > 1.0) {
+            rate = 1.0;
+        }
+        return rate;
+    }
+
+    private double critDmgOf(BattleUnit u)  {
+        double bonus = 0.5;  //base crit is 50%
+        if (u instanceof Character) {
+            Character c = (Character) u;
+            Equipment[] gear = c.getEquippedItems();
+            if (gear != null) {
+                for (int i=0; i< gear.length;i++) {
+                    Equipment e = gear[i];
+                    if (e ==null) {
+                        continue;
+                    }
+                    bonus += percentToFraction(e.getStat("critical_damage"));
+                }
+            }
+        } else if (u instanceof Enemy) { }  //base is 50% so it will be for enemy too
+        if (bonus < 0.0) {
+            bonus = 0.0;
+        }
+        return bonus;
+    }
+    private double percentToFraction(int percent) {
+        if (percent <=0) {
+            return 0.0;
+        }
+        return percent/0.0;
+    }
+
+}
     // //getters for UI/tests if needed (I will delete if not needed)
     // public BattleUnit[][] getBattleGrid() {
     //     return battleGrid;
@@ -186,4 +246,3 @@ public class BattleSystem {
     // public String get BattleState() {
     //     return battleState;
     // }
-}
