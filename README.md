@@ -15,7 +15,7 @@ Config Package | :factory_worker: | Kyler
 Save Package | :factory_worker: | Kyler
 FileIO Package | :heavy_check_mark: | Rajeeve
 Algorithms Package | :factory_worker: | Rajeeve
-Character Data | :thinking: | Not Assigned Yet
+Character Data | :heavy_check_mark: | Done
 Gameplay | :thinking:  | Not Assigned Yet
 
 Legend
