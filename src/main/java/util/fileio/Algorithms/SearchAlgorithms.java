@@ -29,14 +29,14 @@ public class SearchAlgorithms {
         return null;
     }
 
-    public Item sequentialSearch(List<Item> items, String criteria) {
+    public List<Item> sequentialSearch(List<Item> items, String criteria) {
         if (items == null || items.isEmpty() || criteria == null) {
             return null;
         }
         List<Item> unsortedItems = new ArrayList<>(items);
         for (int i = 0; i < unsortedItems.size(); i++) {
             if (unsortedItems.get(i).getName().equals(criteria)) {
-                return unsortedItems.get(i);
+                return unsortedItems;
             }
         }
         return null;
