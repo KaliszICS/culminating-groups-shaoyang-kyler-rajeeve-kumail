@@ -13,6 +13,9 @@ public class FileHandler {
     public String outputformat;
     public  File file;
 
+    public FileHandler() {
+        this.outputFormat = "TXT";
+    }
     public FileHandler(String format) {
         this.outputformat = format;
     }
