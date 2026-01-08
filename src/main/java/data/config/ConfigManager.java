@@ -214,7 +214,7 @@ public class ConfigManager{
         FileHandler fileHandler = new FileHandler("CSV");
 
         List<String[]> csvData = new ArrayList<>();
-        csvData.add(new String[]{"Configuration item, value, type, description"});
+        csvData.add(new String[]{"Configuration item", "value", "type", "description"});
 
         Map<String, String> descriptions = new HashMap<>();
         descriptions.put("graphics.resolution", "Screen resolution");
