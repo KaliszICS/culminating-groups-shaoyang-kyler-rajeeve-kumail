@@ -10,11 +10,11 @@ Entities Package | :heavy_check_mark: | Shaoyang
 Gacha Package | :heavy_check_mark: | Shaoyang
 Battle Package | :heavy_check_mark: | Kumail
 AI Package | :heavy_check_mark: | Kumail
-Inventory Package | :factory_worker: | Shaoyang
+Inventory Package | :heavy_check_mark: | Shaoyang
 Config Package | :factory_worker: | Kyler
 Save Package | :factory_worker: | Kyler
 FileIO Package | :heavy_check_mark: | Rajeeve
-Algorithms Package | :factory_worker: | Rajeeve
+Algorithms Package | :heavy_check_mark: | Rajeeve
 Character Data | :heavy_check_mark: | Done
 Gameplay | :thinking:  | Not Assigned Yet
 
