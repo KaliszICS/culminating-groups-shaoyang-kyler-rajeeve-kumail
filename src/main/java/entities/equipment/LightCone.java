@@ -1,10 +1,16 @@
 package entities.equipment;
 
+/**
+ * The type Light cone.
+ */
 public class LightCone extends Equipment {
     private String pathAlignment; // paths
     private String[] abilities;
 
-    // as default, when not prompted, generate a default lightCone with path The Hunt
+    /**
+     * Instantiates a new Light cone.
+     */
+// as default, when not prompted, generate a default lightCone with path The Hunt
     public LightCone() {
         super();
         this.pathAlignment = "The Hunt";
@@ -16,6 +22,12 @@ public class LightCone extends Equipment {
         setStat("speed", getStat("speed") + 10);
     }
 
+    /**
+     * Instantiates a new Light cone.
+     *
+     * @param name the name
+     * @param path the path
+     */
     public LightCone(String name, String path) {
         super(name, "LightCone");
         this.pathAlignment = path;
@@ -24,13 +36,36 @@ public class LightCone extends Equipment {
         adjustStatsByPath(path);
     }
 
+    /**
+     * Gets path alignment.
+     *
+     * @return the path alignment
+     */
     public String getPathAlignment() { return pathAlignment; }
+
+    /**
+     * Sets path alignment.
+     *
+     * @param pathAlignment the path alignment
+     */
     public void setPathAlignment(String pathAlignment) {
         this.pathAlignment = pathAlignment;
         initializeAbilities(pathAlignment);
         adjustStatsByPath(pathAlignment);
     }
+
+    /**
+     * Get abilities string [ ].
+     *
+     * @return the string [ ]
+     */
     public String[] getAbilities() { return abilities; }
+
+    /**
+     * Sets abilities.
+     *
+     * @param abilities the abilities
+     */
     public void setAbilities(String[] abilities) { this.abilities = abilities; }
 
     private void initializeAbilities(String path) {
@@ -86,6 +121,9 @@ public class LightCone extends Equipment {
         }
     }
 
+    /**
+     * Activate ability.
+     */
     public void activateAbility() {
         System.out.println("Activated LightCone Ability: " + name);
         System.out.println("Path: " + pathAlignment);
