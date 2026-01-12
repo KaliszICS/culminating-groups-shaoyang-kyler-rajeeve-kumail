@@ -6,6 +6,9 @@ import entities.characters.Character;
 import entities.equipment.Equipment;
 import entities.enemies.Enemy;
 
+/**
+ * Creating the battle system
+ */
 public class BattleSystem {
     private final BattleUnit[][] battleGrid = new BattleUnit[2][4];
     private final List<BattleUnit> turnOrder = new ArrayList<>();
@@ -14,6 +17,11 @@ public class BattleSystem {
                                             //other states: IN_PROGRESS, WON, or LOST
     public BattleSystem() {}
 
+    /**
+     * The grid where the battle happens
+     * @param playerTeam the players 
+     * @param enemies the enemies
+     */
     public void initializeBattle(List<Character> playerTeam, List<Enemy> enemies) {
         for (int j = 0; j < 2; j++) {   //clear grid
             for (int i =0; i<4; i++) {
@@ -34,7 +42,9 @@ public class BattleSystem {
         currentTurn = 0;
         battleState = "IN_PROGRESS";
     }
-
+    /**
+     * The battle turn system
+    */
     public void executeTurn() {
         if (!"IN_PROGRESS".equals(battleState)) {
             return;
@@ -71,7 +81,9 @@ public class BattleSystem {
         }
         advanceTurn();
     }
-
+    /**
+     * The turn order for the alive units
+     */
     public void calculateTurnOrder() {
         turnOrder.clear();
         for (int j = 0; j < 2; j++) {
@@ -93,6 +105,9 @@ public class BattleSystem {
         }
     }
 
+    /**
+     * The system to end the battle
+     */
     public boolean checkBattleEnd() {
         boolean playersAlive = false;
         boolean enemiesAlive = false;
@@ -121,6 +136,11 @@ public class BattleSystem {
         return false;
     }
 
+    /**
+     * Using skills and calculating damage
+     * @param unit a battle unit
+     * @param skillIndex the skills available
+     */
     public void useSkill(BattleUnit unit, int skillIndex) {
         if (!"IN_PROGRESS".equals(battleState) || unit==null || !unit.isAlive()) {
             return;
@@ -156,12 +176,23 @@ public class BattleSystem {
             currentTurn = 0;
         }
     }
+    /**
+     * Helper for which unit acts first
+     * @param a the first unit being compared
+     * @param b the second unit being compared
+     * @return the unit who goes first
+     */
     private boolean faster(BattleUnit a, BattleUnit b) {
         if (a.getSpeed() != b.getSpeed()) {
             return a.getSpeed() > b.getSpeed();
         }
         return a.getName().compareTo(b.getName()) < 0;
     }
+    /**
+     * Helper for which unit is alive 
+     * @param acting the character thats alive
+     * @return null when no target
+     */
     private BattleUnit pickAliveOpponent(BattleUnit acting) {
         int enemyRow;
         if (acting instanceof Character) {
@@ -176,9 +207,13 @@ public class BattleSystem {
                 return u;
             }
         }
-        return null;  //for when no target found ig
+        return null;  //for when no target found
     }
-
+    /**
+     * Helper for determining crits
+     * @param u the unit that hit a crit
+     * @return the determined crit rate
+     */
     private double critRateOf(BattleUnit u)  {
         double rate = 0.0;  //0.0is 0% and 1.0 is 100%
         if(u instanceof Character) {
@@ -205,6 +240,11 @@ public class BattleSystem {
         return rate;
     }
 
+    /**
+     * Helper for determining the damage of a crit
+     * @param u the unit that has crit dmg
+     * @return the amount of bonus damage
+     */
     private double critDmgOf(BattleUnit u)  {
         double bonus = 0.5;  //base crit is 50%
         if (u instanceof Character) {
@@ -225,6 +265,11 @@ public class BattleSystem {
         }
         return bonus;
     }
+    /**
+     * Percent to fraction for crit rate and dmg
+     * @param percent the percent rate or damage
+     * @return the percent as a fraction
+     */
     private double percentToFraction(int percent) {
         if (percent <=0) {
             return 0.0;

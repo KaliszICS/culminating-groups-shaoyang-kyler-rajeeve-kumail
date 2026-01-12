@@ -2,7 +2,9 @@ package systems.ai;
 import entities.enemies.Enemy;
 import entities.abs.BattleUnit;
 import java.util.List;
-
+/**
+ * The enemy AI
+ */
 public class EnemyAI {
     private Enemy controlledEnemy;
     private int aggressionLevel;     //0: defensive, 1: balanced, 2: aggressive (set to 1 by default)
