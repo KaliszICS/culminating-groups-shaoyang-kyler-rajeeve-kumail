@@ -1,9 +1,22 @@
 package entities.items;
 
+/**
+ * Represents all material items in game.
+ * Inherited from {@link Item} therefore they have shared attributes.
+ * Unique attributes are material type and rarity (1-5)
+ *
+ * @author Shaoyang Chen
+ * @version 1.4.1
+ * 
+ * @see Item
+ */
 public class MaterialItem extends Item {
     private String materialType;
     private int rarity; // 1-5
 
+    /**
+     * Instantiates a new Material item with no provided args and all default values.
+     */
     public MaterialItem() {
         super();
         this.materialType = "Regular Material";
@@ -11,6 +24,12 @@ public class MaterialItem extends Item {
         this.stackable = true;
     }
 
+    /**
+     * Instantiates a new Material item with provided name and material type
+     *
+     * @param name the name of the material item
+     * @param type the type of the material item
+     */
     public MaterialItem(String name, String type) {
         super(name, 10);
         this.materialType = type;
@@ -18,6 +37,14 @@ public class MaterialItem extends Item {
         this.stackable = true;
     }
 
+    /**
+     * Instantiates a new Material item with provided name, type, rarity and value
+     *
+     * @param name   the name of the material item
+     * @param type   the type of the material item
+     * @param rarity the rarity of the material item
+     * @param value  the value of the material item
+     */
     public MaterialItem(String name, String type, int rarity, int value) {
         super(name, value);
         this.materialType = type;
@@ -26,10 +53,39 @@ public class MaterialItem extends Item {
     }
 
 
+    /**
+     * Gets material type of the material item
+     *
+     * @return the material type of the material item
+     */
     public String getMaterialType() { return materialType; }
+
+    /**
+     * Sets material type of the material item
+     *
+     * @param materialType the material type of the material item
+     */
     public void setMaterialType(String materialType) { this.materialType = materialType; }
+
+    /**
+     * Gets rarity of the material item
+     *
+     * @return the rarity of the material item
+     */
     public int getRarity() { return rarity; }
+
+    /**
+     * Sets rarity of the material item
+     *
+     * @param rarity the of the material item
+     */ 
     public void setRarity(int rarity) { this.rarity = rarity; }
+
+    /**
+     * Determine rarity of the item based on material type
+     * @param type type of material item
+     * @return rarity of the material item
+     */
 
     private int determineRarity(String type) {
         switch (type.toLowerCase()) {
@@ -43,6 +99,14 @@ public class MaterialItem extends Item {
         }
     }
 
+    /**
+     * Combine material item with another material item
+     * only same type and rarity material items can be combined.
+     * Also, there will be a 10% chance of upgrade rarity of the item
+     *
+     * @param other the other material item
+     * @return the material item combined
+     */
     public MaterialItem combine(MaterialItem other) {
         if (this.materialType.equals(other.materialType) &&
                 this.rarity == other.rarity) {
@@ -68,6 +132,11 @@ public class MaterialItem extends Item {
         }
     }
 
+    /**
+     * Gets rarity level of the material item.
+     *
+     * @return the rarity level with stars
+     */
     public String getRarityLevel() {
         switch (rarity) {
             case 1: return "1★";
@@ -79,6 +148,9 @@ public class MaterialItem extends Item {
         }
     }
 
+    /**
+     * Use the material item.
+     */
     @Override
     public void use() {
         System.out.println("Use Material: " + name);
@@ -87,6 +159,10 @@ public class MaterialItem extends Item {
         System.out.println("Can be combined and upgrades with same rarity and type material");
     }
 
+    /**
+     * Get drop rate of the item based on their rarity
+     * @return the drop rate
+     */
     @Override
     public double getDropRate() {
         // adjust droprate by rarity
@@ -100,14 +176,21 @@ public class MaterialItem extends Item {
         }
     }
 
+    /**
+     * Displays(prints) all information about the material item
+     */
     @Override
     public void displayInfo() {
         super.displayInfo();
         System.out.println("Type: Material");
         System.out.println("Material Type: " + materialType);
-        System.out.println("Rarity: " + getRarityLevel() + " (" + rarity + "★)");
+        System.out.println("Rarity: " + " (" + getRarityLevel() + ")");
     }
 
+    /**
+     * Return all information about this material item in a CSV format
+     * @return CSV format of all information about this material item
+     */
     @Override
     public String toCSVFormat() {
         String str = ",Material," + materialType + "," + rarity;
