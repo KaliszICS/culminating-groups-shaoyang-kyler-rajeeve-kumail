@@ -26,7 +26,7 @@ public class SaveManager {
         makeSaveFolder();
     }
 /**
- * 
+ * saves data to the first slot
  * @param gameData to be saved
  * @return true if the game data was saved. false if the game data was not saved
  */
@@ -46,30 +46,23 @@ public class SaveManager {
         System.out.println("No empty save slot found.");
         return false;
     }
-
+/**
+ * saves the same data if a slot already exist
+ * @param gameData
+ * @param slot
+ * @return
+ */
     public boolean saveGame(GameData gameData, int slot) {
-        if (gameData == null) {
+        if (slot < 1 || slot > maxSaveSlots) {
             return false;
         }
-
-        if (slot < 1 || slot > maxSaveSlots){
-            return false; 
-        }
-
-        for (int i = 1; i <= maxSaveSlots; i++) {
-            File saveFile = new File(saveFilePath + "save_" + i + ".dat");
-
-            if (!saveFile.exists()) {
-                return fileHandler.writeToFile(gameData, saveFile.getPath());
-            }
-        }
-
-        System.out.println("No empty save slot found.");
-        return false;
-    }
+    
+    File file = new File(saveFilePath + "save_" + slot + ".dat");
+    return fileHandler.writeToFile(gameData, file.getPath());
+}
 
     /**
-     * load the data from a given slot
+     * loading the game data from a specfic save slot
      * 
      * @param slot
      * @return
@@ -98,6 +91,11 @@ public class SaveManager {
         return null;
     }
 
+    /**
+     * deletes the save slot
+     * @param slot
+     * @return
+     */
     public boolean deleteSave(int slot) {
         if (slot < 1 || slot > maxSaveSlots) {
             return false;
