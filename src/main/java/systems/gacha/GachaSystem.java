@@ -46,7 +46,10 @@ public class GachaSystem {
         probabilityTable[0][2] = 0.943;
         probabilityTable[1][2] = 0.051;
         probabilityTable[2][2] = 0.006;
-        Random random = new Random();
+        // I made the dumbest mistake ever, only initialized "random" here ...  -->
+        // previously:
+        // Random random = new Random();
+        random = new Random();
 
         pityCounter5Star = 0;
         pityCounter4Star = 0;
