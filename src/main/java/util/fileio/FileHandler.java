@@ -1,6 +1,5 @@
 package util.fileio;
 
-import entities.items.Item;
 import java.io.*;
 import java.util.List;
 
@@ -9,6 +8,10 @@ public class FileHandler {
 
     public FileHandler(String format) {
         this.outputFormat = format;
+    }
+
+    public FileHandler() {
+        
     }
 
     /**
@@ -48,7 +51,7 @@ public class FileHandler {
 
     // --- Placeholders for your Export methods ---
 
-    public boolean exportToCSV(List<Item> items, String filename) {
+    public boolean exportToCSV(List<String[]> items, String filename) {
         // Logic for converting items list to CSV text goes here
         return false;
     }
