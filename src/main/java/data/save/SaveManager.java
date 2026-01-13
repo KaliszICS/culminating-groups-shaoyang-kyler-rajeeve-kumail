@@ -6,19 +6,30 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/** 
+ * This class handles anything related to saving data
+ * These include: save slots, save directory and write the game data
+ */
 public class SaveManager {
 
     private String saveFilePath;
     private int maxSaveSlots;
     private FileHandler fileHandler;
-
+/**
+ * Constructor that creates a SaveManager object
+ * Sets a max save lot and creates a filder handler object
+ */
     public SaveManager() {
         saveFilePath = "saves/";
         maxSaveSlots = 5;
         fileHandler = new FileHandler("SAVE");
         makeSaveFolder();
     }
-
+/**
+ * 
+ * @param gameData to be saved
+ * @return true if the game data was saved. false if the game data was not saved
+ */
     public boolean saveGame(GameData gameData) {
         if (gameData == null) {
             return false;
@@ -35,6 +46,34 @@ public class SaveManager {
         System.out.println("No empty save slot found.");
         return false;
     }
+
+    public boolean saveGame(GameData gameData, int slot) {
+        if (gameData == null) {
+            return false;
+        }
+
+        if (slot >= 1 && slot <= maxSaveSlots){
+            return false;
+        }
+
+        for (int i = 1; i <= maxSaveSlots; i++) {
+            File saveFile = new File(saveFilePath + "save_" + i + ".dat");
+
+            if (!saveFile.exists()) {
+                return fileHandler.writeToFile(gameData, saveFile.getPath());
+            }
+        }
+
+        System.out.println("No empty save slot found.");
+        return false;
+    }
+
+    /**
+     * load the data from a given slot
+     * 
+     * @param slot
+     * @return
+     */
 
     public GameData loadGame(int slot) {
         if (slot < 1 || slot > maxSaveSlots) {
