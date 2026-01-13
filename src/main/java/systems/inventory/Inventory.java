@@ -246,10 +246,14 @@ public class Inventory implements Sortable, Searchable {
     public List<Item> searchItemByType(String type) {
         System.out.println("Search by type: " + type);
         List<Item> result = searchAlgorithms.sequentialSearch(items, type);
-        if (!result.isEmpty()) {
-            System.out.println("Found " + result.size() + " " + type + "items:");
-            for (Item item : result) {
-                System.out.println("  - " + item.getName());
+        if  (result != null) {
+            if (!result.isEmpty()) {
+                System.out.println("Found " + result.size() + " " + type + "items:");
+                for (Item item : result) {
+                    System.out.println("  - " + item.getName());
+                }
+            } else {
+                System.out.println("Not found with provided" + type);
             }
         } else {
             System.out.println("Not found with provided" + type);
