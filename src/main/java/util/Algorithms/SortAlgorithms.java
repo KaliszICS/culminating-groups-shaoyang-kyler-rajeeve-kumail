@@ -71,28 +71,50 @@ public class SortAlgorithms {
         return items;
     }
 
-    public List<Item> mergeSort(List<Item> items) {
+       public List<Item> mergeSort(List<Item> items) {
         if (items == null || items.size() == 0) {
             return items;
         }
         List<Item> sortedItems = new ArrayList<>(items);
         int n = sortedItems.size();
-        if (n % 2 == 0) {
-            return null;
-        }
         int mid = n / 2;
-        int[] left = new int[mid];
-        int[] right = new int[n - mid];
+        List<Item> left = new ArrayList<>();
+        List<Item> right = new ArrayList<>();
         for (int i = 0; i < mid; i++) {
-            left[i] = i;
+            left.add(sortedItems.get(i));
         }
         for (int i = mid; i < n; i++) {
-            right[i - mid] = i;
+            right.add(sortedItems.get(i + 1));
         }
-        Item[] leftItems = new Item[left.length];
-        Item[] rightItems = new Item[right.length];
-        for (int i = 0; i < left.length; i++) {
+        left = mergeSort(left);
+        right = mergeSort(right);
+        return merge(left, right);
+    }
+
+    public List<Item> merge(List<Item> left, List<Item> right) {
+        List<Item> sortedItems = new ArrayList<>(left.size() + right.size());
+        int i = 0;
+        int j = 0;
+        while (i < left.size() && j < right.size()) {
+            if (left.get(i).getName().compareTo(right.get(j).getName()) < 0) {
+                sortedItems.add(left.get(i++));
+            }
+            else if (left.get(i).getName().compareTo(right.get(j).getName()) > 0) {
+                sortedItems.add(right.get(j++));
+            }
+            else {
+                sortedItems.add(left.get(i++));
+            }
+            while (i < left.size() && left.get(i).getName().compareTo(right.get(j).getName()) < 0) {
+                sortedItems.add(right.get(j++));
+            }
         }
-        return null;
+        while (i < left.size()) {
+            sortedItems.add(left.get(i++));
+        }
+        while (j < right.size()) {
+            sortedItems.add(right.get(j++));
+        }
+        return sortedItems;
     }
 }
