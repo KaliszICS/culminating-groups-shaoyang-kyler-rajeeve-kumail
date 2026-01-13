@@ -52,8 +52,8 @@ public class SaveManager {
             return false;
         }
 
-        if (slot >= 1 && slot <= maxSaveSlots){
-            return false;
+        if (slot < 1 || slot > maxSaveSlots){
+            return false; 
         }
 
         for (int i = 1; i <= maxSaveSlots; i++) {
@@ -128,8 +128,8 @@ public class SaveManager {
 
     private void makeSaveFolder() {
         File folder = new File(saveFilePath);
-        if (!folder.exists()) {
-            folder.mkdirs();
+        if (!folder.exists() && !folder.mkdirs()) {
+            System.err.println("Failed to create save folder: " + saveFilePath);
         }
     }
 }
