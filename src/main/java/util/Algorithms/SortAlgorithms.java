@@ -5,12 +5,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+/**
+ * The  sort algorithms of ultilies. The purposse of the codes is the sort, rarity,name and type
+ * @author Rajeeve Ravi
+ * @version 1.9
+ */
 public class SortAlgorithms {
 
+    /**
+     * The constructor of  sort algorithms.
+     */
     public SortAlgorithms() {
     }
 
+    /**
+     * Bubble sort purpose is to sort rarity
+     *
+     * @param items the list of items to sort
+     * @return the sortedItems
+     */
     public List<Item> bubbleSort(List<Item> items) {
         if (items == null || items.isEmpty()) {
             return items;
@@ -34,6 +47,12 @@ public class SortAlgorithms {
     }
 
 
+    /**
+     * Selection sort, purpose is to all sorts
+     *
+     * @param items the list of items to sort
+     * @return the sortedItems
+     */
     public List<Item> selectionSort(List<Item> items) {
         if (items == null || items.isEmpty()) {
             return items;
@@ -54,6 +73,12 @@ public class SortAlgorithms {
         return sortedItems;
     }
 
+    /**
+     * Insertion sort, purpose is sort items
+     *
+     * @param items the list of items to sort
+     * @return the list
+     */
     public List<Item> insertionSort(List<Item> items) {
         if (items == null || items.isEmpty()) {
             return items;
@@ -72,6 +97,12 @@ public class SortAlgorithms {
         return sortedItems;
     }
 
+    /**
+     * Merge sort, purpose is for recursion sort for items
+     *
+     * @param items the list of items to sort
+     * @return the merge( left and & right)
+     */
     public List<Item> mergeSort(List<Item> items) {
         if (items == null || items.size() <= 1) {
             return items;
@@ -94,6 +125,13 @@ public class SortAlgorithms {
         return merge(left, right);
     }
 
+    /**
+     * Merge lists purpose is to help Mergesort.
+     *
+     * @param left  the left meant to split then merged for easier handling
+     * @param right the right meant to split then merged easier handling
+     * @return the sortedItems
+     */
     public List<Item> merge(List<Item> left, List<Item> right) {
         List<Item> sortedItems = new ArrayList<>(left.size() + right.size());
         int i = 0;
