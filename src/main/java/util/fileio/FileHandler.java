@@ -1,67 +1,148 @@
 package util.fileio;
 
-import java.io.*;
+import entities.items.Item;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
+
+/**
+ * The  Filehandler of utilities, the purpose of filehandler is to create,read, write and export to CVS and TXT
+ * @author Rajeeve Ravi
+ *  @version 1.4
+ */
 public class FileHandler {
-    public String outputFormat;
+    /**
+     * The Outputformat.
+     */
+    public String outputformat;
+    /**
+     * The File.
+     */
+    public  File file;
 
-    public FileHandler(String format) {
-        this.outputFormat = format;
-    }
-
+    /**
+     * Constructor of FileHandler, for TXT
+     */
     public FileHandler() {
-        
+        this.outputformat = "TXT";
     }
 
     /**
-     * Writes the GameData object to a file using Serialization.
+     * Constructor of new FileHandler, for format
+     *
+     * @param format the format
+     */
+    public FileHandler(String format) {
+        this.outputformat = format;
+    }
+
+    /**
+     * File handler file handler.
+     *
+     * @param format the format
+     * @return the file handler
+     */
+    public FileHandler FileHandler(String format) {
+        return new FileHandler(format);
+    }
+
+    /**
+     * Write to file boolean.
+     *
+     * @param data     the data
+     * @param filename the filename
+     * @return the boolean (true)
      */
     public boolean writeToFile(Object data, String filename) {
-        if (data == null || filename == null || filename.isEmpty()) {
+        if (data == null || filename == null || filename.isEmpty())
             return false;
-        }
 
-        // We use ObjectOutputStream to save the actual object state
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(data);
-            return true;
-        } catch (IOException e) {
-            System.err.println("Error saving file: " + e.getMessage());
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(data.toString());
+        } catch (Exception e) {
             return false;
         }
+        return true;
     }
 
     /**
-     * Reads a serialized GameData object back from a file.
+     * Read from file object.
+     *
+     * @param filename the filename
+     * @return the object(null)
      */
     public Object readFromFile(String filename) {
-        File file = new File(filename);
-        if (!file.exists()) {
-            return null;
+        try {
+            File file = new File(filename);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            return ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading file: " + e.getMessage());
-            return null;
-        }
+        return null;
     }
 
-    // --- Placeholders for your Export methods ---
-
-    public boolean exportToCSV(List<String[]> items, String filename) {
-        // Logic for converting items list to CSV text goes here
+    /**
+     * Export to csv boolean.
+     *
+     * @param data     the data
+     * @param filename the filename
+     * @return the boolean (false)
+     */
+    public boolean exportToCSV(List<String[]> data, String filename) {
+        try {
+            File file = new File(filename);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return false;
     }
 
-    public boolean exportToTXT(String data, String filename) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write(data);
-            return true;
-        } catch (IOException e) {
-            return false;
+    /**
+     * Export to csv boolean.
+     *
+     * @param items the items
+     * @return the boolean (false)
+     */
+    public boolean exportToCSV(List<Item> items) {
+        try {
+            File file = new File("CSV");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+        return false;
+    }
+
+    /**
+     * Export to txt boolean.
+     *
+     * @param data     the data
+     * @param filename the filename
+     * @return the boolean (false)
+     */
+    public boolean exportToTXT(String data, String filename) {
+        try {
+            File file = new File(filename);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    /**
+     * Export to txt boolean.
+     *
+     * @param items the items
+     * @return the boolean (false)
+     */
+    public boolean exportToTXT(List<Item> items) {
+        try  {
+            File file = new File("TXT");
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 }
