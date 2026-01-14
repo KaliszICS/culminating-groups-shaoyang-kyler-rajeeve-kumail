@@ -7,6 +7,9 @@ import java.io.*;
 /**
  * This class manages the game configuration settings
  * It handles loading, saving, and accessing configuration properties
+ * 
+ * @author Kyler Huang
+ * @version 1.0
  */
 
 public class ConfigManager{

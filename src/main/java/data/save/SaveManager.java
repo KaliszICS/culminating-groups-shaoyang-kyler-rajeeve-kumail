@@ -10,6 +10,11 @@ import java.util.List;
  * This class handles anything related to saving data
  * These include: save slots, save directory and write the game data
  */
+
+/**
+ * @author Kyler Huang
+ * @version 1.0
+ */
 public class SaveManager {
 
     private String saveFilePath;
