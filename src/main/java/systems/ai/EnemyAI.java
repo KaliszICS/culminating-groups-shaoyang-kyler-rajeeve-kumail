@@ -2,32 +2,60 @@ package systems.ai;
 import entities.enemies.Enemy;
 import entities.abs.BattleUnit;
 import java.util.List;
+
 /**
- * The enemy AI
+ * The enemy AI responsible for the enemies actions
+ * @author Kumail
+ * @version 4.0
  */
 public class EnemyAI {
     private Enemy controlledEnemy;
     private int aggressionLevel;     //0: defensive, 1: balanced, 2: aggressive (set to 1 by default)
     private String[] behaviorPatterns;
 
+    /**
+     * Instantiates a new Enemy ai
+     */
     public EnemyAI() {
         this.controlledEnemy = null;
         this.aggressionLevel = 1;
         this.behaviorPatterns = new String[] { "HIGHEST_THREAT"};
     }
 
+    /**
+     * Instantiates a new Enemy ai with an enemy
+     *
+     * @param enemy the enemy created that is being controlled
+     */
     public EnemyAI(Enemy enemy) {
         this.controlledEnemy = enemy;
         this.aggressionLevel = 1;
         this.behaviorPatterns = new String[] { "HIGHEST_THREAT"};
     }
 
+    /**
+     * Sets controlled enemy.
+     *
+     * @param enemy the enemy
+     */
     public void setControlledEnemy(Enemy enemy) {
         this.controlledEnemy = enemy;
     }
+
+    /**
+     * Gets controlled enemy
+     *
+     * @return the controlled enemy
+     */
     public Enemy getControlledEnemy() {
         return controlledEnemy;
     }
+
+    /**
+     * Sets aggression level
+     *0:defensive,1:balanced,2:aggressive
+     * @param level the level of aggression
+     */
     public void setAggressionLevel(int level) {
         if (level < 0) {
             level = 0;
@@ -37,16 +65,39 @@ public class EnemyAI {
         }
         this.aggressionLevel = level;
     }
+
+    /**
+     * Gets aggression level
+     *
+     * @return the aggression level
+     */
     public int getAggressionLevel() {
         return aggressionLevel;
     }
+
+    /**
+     * Sets behavior patterns for the AI decisions
+     *
+     * @param patterns the behaviour
+     */
     public void setBehaviorPatterns(String[] patterns) {
         this.behaviorPatterns = patterns;
     }
+
+    /**
+     * Get the behavior patterns that are used
+     *
+     * @return the patterns used
+     */
     public String[] getBehaviorPatterns() {
         return behaviorPatterns;
     }
 
+    /**
+     * Decide the next actions of the AI
+     *
+     * @return the action
+     */
     public String decideAction() {
         if (controlledEnemy == null) {
             return "WAIT";
@@ -72,6 +123,12 @@ public class EnemyAI {
         return "ATTACK";
     }
 
+    /**
+     * Select target battle unit.
+     *
+     * @param targets the targets
+     * @return the battle unit
+     */
     public BattleUnit selectTarget(List<BattleUnit> targets) {
         if (targets == null || targets.isEmpty()) {
             return null;
@@ -145,6 +202,12 @@ public class EnemyAI {
         return pool.get(idx);
     }
 
+    /**
+     * Evaluate threat
+     *
+     * @param unit the unit
+     * @return the threart level
+     */
     public int evaluateThreat(BattleUnit unit) {
         if (unit == null) {
             return Integer.MIN_VALUE;

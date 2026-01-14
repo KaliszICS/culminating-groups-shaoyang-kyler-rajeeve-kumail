@@ -7,7 +7,9 @@ import entities.equipment.Equipment;
 import entities.enemies.Enemy;
 
 /**
- * Creating the battle system
+ * Creating the battle system that manages the battles
+ * @author Kumail
+ * @version 4.0
  */
 public class BattleSystem {
     private final BattleUnit[][] battleGrid = new BattleUnit[2][4];
@@ -15,12 +17,16 @@ public class BattleSystem {
     private int currentTurn=0;
     private String battleState = "PREPARE"; //when it just starts (PREPARE)
                                             //other states: IN_PROGRESS, WON, or LOST
+    /**
+     * Instantiates a new Battle system.
+     */
     public BattleSystem() {}
 
     /**
      * The grid where the battle happens
-     * @param playerTeam the players 
-     * @param enemies the enemies
+     *
+     * @param playerTeam the list of player characters
+     * @param enemies    the list of enemies characters
      */
     public void initializeBattle(List<Character> playerTeam, List<Enemy> enemies) {
         for (int j = 0; j < 2; j++) {   //clear grid
@@ -42,9 +48,10 @@ public class BattleSystem {
         currentTurn = 0;
         battleState = "IN_PROGRESS";
     }
+
     /**
-     * The battle turn system
-    */
+     * Executes a turn for the unit in the turn order
+     */
     public void executeTurn() {
         if (!"IN_PROGRESS".equals(battleState)) {
             return;
@@ -77,12 +84,13 @@ public class BattleSystem {
         target.setCurrentHP(Math.max(0, target.getCurrentHP() - dmg));
 
         if (checkBattleEnd()) {
-            return;
+            return;   //battle ended
         }
         advanceTurn();
     }
+
     /**
-     * The turn order for the alive units
+     * The turn order for the alive units by speed of each unit
      */
     public void calculateTurnOrder() {
         turnOrder.clear();
@@ -106,7 +114,9 @@ public class BattleSystem {
     }
 
     /**
-     * The system to end the battle
+     * Checks if the battle ended
+     *
+     * @return true if battle has ended
      */
     public boolean checkBattleEnd() {
         boolean playersAlive = false;
@@ -138,7 +148,8 @@ public class BattleSystem {
 
     /**
      * Using skills and calculating damage
-     * @param unit a battle unit
+     *
+     * @param unit       a battle unit
      * @param skillIndex the skills available
      */
     public void useSkill(BattleUnit unit, int skillIndex) {
@@ -169,6 +180,9 @@ public class BattleSystem {
 
     //helpers
 
+    /**
+     * Advances turn to next unit
+     */
     private void advanceTurn() {
         currentTurn++;
         if (currentTurn >= turnOrder.size()) {
@@ -278,7 +292,7 @@ public class BattleSystem {
     }
 
 }
-    // //getters for UI/tests if needed (I will delete if not needed)
+    // //getters for UI/tests( not needed)
     // public BattleUnit[][] getBattleGrid() {
     //     return battleGrid;
     // }

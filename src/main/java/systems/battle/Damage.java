@@ -1,21 +1,24 @@
 package systems.battle;
 import java.util.Random;
 
-//tell me if you guys want to add or not add things because im not really sure what should/shouldnt be here
 /**
- * The damage calculator
+ * The damage calculator for combat
+ * @author Kumail
+ * @version 4.0
  */
 public final class Damage{
     private static final Random RNG = new Random();
     private Damage() {}
 
+
     /**
-     * Compute the damage from all factors
-     * @param atk the base attack damage
-     * @param def the defense of target
-     * @param crit the crit rate
-     * @param critDmg the crit damage
-     * @return the damage
+     * Compute the damage taking into account all factors
+     *
+     * @param atk     the base attack damage
+     * @param def     the defense of target
+     * @param crit    the chance of crit
+     * @param critDmg the crit damage (bonus dmg)
+     * @return the total damage, never less than zero
      */
     public static int compute(int atk, int def, double crit, double critDmg) {
         final double def_Factor = 0.5;           //TBD value idk what to put the number at rn, so it will be at 0.5
@@ -34,9 +37,9 @@ public final class Damage{
     }
 
     /**
-     * prevents out of range inputs
-     * @param v 
-     * @return v
+     * makes/clamps values between 0.0 and 1.0
+     * @param v the value
+     * @return the clamped value, between 0.0 and 1.0
      */
     private static double clamp01(double v) {
         if (v<0) {
