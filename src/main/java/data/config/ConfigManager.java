@@ -4,16 +4,34 @@ import util.fileio.FileHandler;
 import java.util.*;
 import java.io.*;
 
+/**
+ * This class manages the game configuration settings
+ * It handles loading, saving, and accessing configuration properties
+ */
+
 public class ConfigManager{
+    /**
+     * Properties object to store configuration key-value pairs
+     */
     private Properties configProps;
+    /**
+     * Path to the configuration file 
+     * */
     private String configPath;
 
+    /**
+     * Constructor that creates a ConfigManager object
+     * Loads the configuration from the file or creates default settings if the file does not exist
+     */
     public ConfigManager() {
         this.configProps = new Properties();
         this.configPath = "game_config.properties";
         loadConfig();
     }
 
+    /**
+     * Loads configuration from the file
+     */
     public void loadConfig() {
     File configPathFile = new File(configPath);
 
@@ -32,6 +50,9 @@ public class ConfigManager{
         setDefaultProperties();
     }
 }
+    /**
+     * Sets default configuration properties
+     */
      private void setDefaultProperties() {
         configProps.setProperty("game.difficulty", "normal");
         configProps.setProperty("game.language", "en_CA");
@@ -42,23 +63,47 @@ public class ConfigManager{
         configProps.setProperty("game.battle_speed", "1.0");
         configProps.setProperty("game.show_damage_numbers", "true");
     }
-
+    /**
+     * Gets all configuration properties
+     * @return Properties object containing all configuration key-value pairs
+     */ 
      public Properties getAllProperties() {
         return new Properties(configProps);
     }
-
+    /**
+     * Gets a configuration property by key
+     * @param key the configuration key
+     * @return the value associated with the key, or null if the key does not exist
+     */
     public String getProperty(String key){
         return configProps.getProperty(key);
     }
 
+    /**
+     * Gets a configuration property by key with a default value
+     * @param key the configuration key
+     * @param defaultValue the default value to return if the key does not exist
+     * @return the value associated with the key, or defaultValue if the key does not exist
+     */
     public String getProperty(String key, String defaultValue) {
         return configProps.getProperty(key, defaultValue);
     }
 
+    /**
+     * Gets an integer configuration property by key
+     * @param key the configuration key
+     * @return the integer value associated with the key, or 0 if the key does not exist or is not a valid integer
+     */
     public int getIntProperty(String key) {
         return getIntProperty(key, 0);
     }
 
+    /**
+     * Gets an integer configuration property by key with a default value
+     * @param key the configuration key
+     * @param defaultVal the default integer value to return if the key does not exist or is not a valid integer
+     * @return the integer value associated with the key, or defaultVal if the key does not exist or is not a valid integer
+     */
     public int getIntProperty(String key, int defaultVal) {
         String propString = configProps.getProperty(key);
         if (propString == null) {
@@ -72,6 +117,11 @@ public class ConfigManager{
         }
     }
     
+    /**
+     * Gets a double configuration property by key
+     * @param key the configuration key
+     * @return the double value associated with the key, or 0.0 if the key does not exist or is not a valid double
+     */
     public double getDoubleProperty(String key) {
         return getDoubleProperty(key, 0.0);
     }

@@ -53,9 +53,9 @@ public class SaveManager {
     /**
      * saves the same data if a slot already exist
      *
-     * @param gameData
-     * @param slot
-     * @return
+     * @param gameData to be saved
+     * @param slot     the slot number to save the game data
+     * @return true if the game data was saved. false if the game data was not saved
      */
     public boolean saveGame(GameData gameData, int slot) {
         if (slot < 1 || slot > maxSaveSlots) {
@@ -85,8 +85,8 @@ public class SaveManager {
     /**
      * loading the game data from a specfic save slot
      *
-     * @param slot
-     * @return
+     * @param slot the slot number to load the game data from
+     * @return the game data loaded from the save slot
      */
 
     public GameData loadGame(int slot) {
@@ -115,8 +115,8 @@ public class SaveManager {
     /**
      * deletes the save slot
      *
-     * @param slot
-     * @return
+     * @param slot the slot number to delete the game data from
+     * @return true if the save slot was deleted. false if the save slot was not deleted
      */
     public boolean deleteSave(int slot) {
         if (slot < 1 || slot > maxSaveSlots) {
