@@ -19,6 +19,13 @@ import util.fileio.FileHandler;
 
 import java.util.*;
 
+/**
+ * Represents gameplay for this game. This is the class which user interacts with.
+ * Include primary user interfaces and also handles incorrect commands from the user.
+ *
+ * @author Shaoyang Chen
+ * @version 1.2.0
+ */
 public class GamePlay {
     private CharacterData characterData;
     private GachaSystem gachaSystem;
@@ -31,20 +38,21 @@ public class GamePlay {
     private boolean gameRunning;
     private Random random;
     private BattleSystem battleSystem;
-
-    // ASCII Art
     private static final String LOGO =
             "╔═══════════════════════════════════════════════════════════════╗\n" +
-                    "║    ███████╗████████╗██████╗ ███████╗██╗  ██╗███████╗██████╗  ║\n" +
-                    "║    ██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║  ██║██╔════╝██╔══██╗ ║\n" +
-                    "║    ███████╗   ██║   ██████╔╝█████╗  ███████║█████╗  ██████╔╝ ║\n" +
-                    "║    ╚════██║   ██║   ██╔══██╗██╔══╝  ██╔══██║██╔══╝  ██╔══██╗ ║\n" +
-                    "║    ███████║   ██║   ██║  ██║███████╗██║  ██║███████╗██║  ██║ ║\n" +
-                    "║    ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ║\n" +
+                    "║         ███████╗████████╗ █████╗ ██████╗  █████╗ ██╗██╗       ║\n" +
+                    "║         ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██║██║       ║\n" +
+                    "║         ███████╗   ██║   ███████║██████╔╝███████║██║██║       ║\n" +
+                    "║         ╚════██║   ██║   ██╔══██║██╔══██╗██╔══██║██║██║       ║\n" +
+                    "║         ███████║   ██║   ██║  ██║██║  ██║██║  ██║██║███████╗  ║\n" +
+                    "║         ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚══════╝  ║\n" +
                     "║                                                               ║\n" +
                     "║                   STAR RAIL DESTINY CROSSING                  ║\n" +
                     "╚═══════════════════════════════════════════════════════════════╝\n";
 
+    /**
+     * Initialize game play, load game, load all info required, load configs and saves if applicable
+     */
     public GamePlay() {
         this.scanner = new Scanner(System.in);
         this.gameRunning = true;
@@ -113,6 +121,9 @@ public class GamePlay {
     }
 
 
+    /**
+     * Prints out the start screen of the game
+     */
     public void start() {
         clearScreen();
         System.out.println(LOGO);
@@ -128,6 +139,7 @@ public class GamePlay {
 
     private void showMainMenu() {
         clearScreen();
+        System.out.println(LOGO);
         System.out.println("╔═══════════════════════════════════════════════════════════╗\n" +
                 "║                        MAIN MENU                          ║\n" +
                 "╠═══════════════════════════════════════════════════════════╣\n" +
@@ -479,10 +491,8 @@ public class GamePlay {
         System.out.println("2. Normal Difficulty (Elite Enemies)");
         System.out.println("3. Hard Difficulty (Boss Enemy)");
         System.out.println("4. Return to Main Menu");
-
         System.out.print("Select difficulty: ");
         String choice = scanner.nextLine();
-
         if (choice.matches("[1-3]")) {
             int difficulty = Integer.parseInt(choice);
             startBattle(difficulty);
@@ -493,26 +503,19 @@ public class GamePlay {
 
     private void startBattle(int difficulty) {
         System.out.println("\n=== BATTLE START ===");
-
         System.out.println("Select characters for battle...");
         List<Character> selectedChars = selectCharactersForBattle();
-
         if (selectedChars.isEmpty()) {
             System.out.println("No characters selected!");
             return;
         }
-
         System.out.println("\nBattle starting with:");
         for (Character character : selectedChars) {
             System.out.println("  - " + character.getName() + " (HP: " +
                     character.getCurrentHP() + "/" + character.getMaxHP() + ")");
         }
-
         pause(2);
-
-        // Create enemies based on difficulty
         List<Enemy> enemies = createEnemies(difficulty);
-
         System.out.println("\nEnemies encountered:");
         for (Enemy enemy : enemies) {
             System.out.println("  - " + enemy.getName() + " (HP: " +
@@ -523,8 +526,7 @@ public class GamePlay {
 
         // Initialize battle
         battleSystem.initializeBattle(selectedChars, enemies);
-
-        // Start battle loop
+        // Start loop and change status
         boolean battleInProgress = true;
         int turnCount = 1;
 
@@ -532,10 +534,7 @@ public class GamePlay {
             clearScreen();
             System.out.println("=== TURN " + turnCount + " ===");
             System.out.println("=======================");
-
-            // Display battle status
             displayBattleStatus(selectedChars, enemies);
-
             System.out.println("\n=== PLAYER TURN ===");
             // Player characters take action
             for (Character character : selectedChars) {
@@ -546,10 +545,8 @@ public class GamePlay {
                     if (character instanceof FiveStarCharacter) {
                         System.out.println("3. Use Ultimate");
                     }
-
                     System.out.print("Select action: ");
                     String action = scanner.nextLine();
-
                     switch (action) {
                         case "1":
                             performBasicAttack(character, enemies);
@@ -581,7 +578,6 @@ public class GamePlay {
                             System.out.println("Invalid action, using basic attack!");
                             performBasicAttack(character, enemies);
                     }
-
                     // Check if battle ended
                     if (checkBattleEnd(enemies)) {
                         battleInProgress = false;
@@ -602,7 +598,6 @@ public class GamePlay {
                 if (enemy.isAlive()) {
                     System.out.println("\n" + enemy.getName() + "'s turn:");
                     enemy.useSkill();
-
                     // Enemy attacks a random player character
                     Character target = getRandomAliveCharacter(selectedChars);
                     if (target != null) {
@@ -610,13 +605,11 @@ public class GamePlay {
                         target.takeDamage(damage);
                         System.out.println(enemy.getName() + " attacked " +
                                 target.getName() + " for " + damage + " damage!");
-
                         // Check if character died
                         if (!target.isAlive()) {
                             System.out.println(target.getName() + " has been defeated!");
                         }
                     }
-
                     // Check if battle ended
                     if (checkBattleEnd(selectedChars)) {
                         battleInProgress = false;
@@ -627,18 +620,16 @@ public class GamePlay {
                 }
             }
 
-            // Check for phase transitions (for boss enemies)
+            // Check for phase change (for boss enemies)
             for (Enemy enemy : enemies) {
                 if (enemy instanceof BossEnemy) {
                     BossEnemy boss = (BossEnemy) enemy;
-                    // Boss automatically transitions phase when HP is low
+                    // Boss automatic phase change
                     if (boss.hasPhases() && boss.getCurrentHP() < boss.getMaxHP() / 2) {
                         boss.transitionPhase();
                     }
                 }
             }
-
-            // Apply end-of-turn effects (healing, etc.)
             applyEndOfTurnEffects(selectedChars);
 
             turnCount++;
@@ -679,7 +670,7 @@ public class GamePlay {
             characterData.recordBattle(true);
         } else {
             System.out.println("\n=== BATTLE DEFEAT! ===");
-            // Heal all characters to full after defeat
+            // Heal all characters to full after battle completed.
             for (Character character : selectedChars) {
                 character.setCurrentHP(character.getMaxHP());
             }
@@ -824,19 +815,15 @@ public class GamePlay {
     }
 
     private int calculatePlayerDamage(Character attacker, Enemy defender) {
-        // Simple damage calculation using the Damage class
         double critRate = 0.05; // Base 5% crit rate
         double critDamage = 0.5; // Base 50% crit damage
-
-        // Could be enhanced with equipment bonuses
+        // ex damage caused by equipments and items are calc here
         return Damage.compute(attacker.getAttack(), defender.getDefense(), critRate, critDamage);
     }
 
     private int calculateEnemyDamage(Enemy attacker, Character defender) {
-        // Simple damage calculation for enemies
         double critRate = 0.05;
         double critDamage = 0.5;
-
         return Damage.compute(attacker.getAttack(), defender.getDefense(), critRate, critDamage);
     }
 
@@ -900,6 +887,8 @@ public class GamePlay {
             }
         }
     }
+    
+    // the old battle system, which just do simulations based on character rarity, level and difficulties selected by the player
 
 //    private void battleMenu() {
 //        clearScreen();
@@ -1275,6 +1264,11 @@ public class GamePlay {
         }
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         GamePlay game = new GamePlay();
         game.start();
