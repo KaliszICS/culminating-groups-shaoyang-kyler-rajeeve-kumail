@@ -137,6 +137,10 @@ public class SaveManager {
         return false;
     }
 
+    /**
+     * lists all the save slots that have data
+     * @return a list of save slot names that have data
+     */
     public List<String> listSaves() {
         List<String> saveList = new ArrayList<>();
 
@@ -151,6 +155,9 @@ public class SaveManager {
         return saveList;
     }
 
+    /**
+     * creates the save folder if it does not exist
+     */
     private void makeSaveFolder() {
         File folder = new File(saveFilePath);
         if (!folder.exists() && !folder.mkdirs()) {
