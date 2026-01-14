@@ -10,6 +10,12 @@ import java.util.*;
 
 /**
  * Represents character data in game, including all attributes of the character and also game history for the character
+ * Implements {@link Serializable} there for all things here can be written to a file (updated on emerg. 2026/-1/13)
+ *
+ * @author Shaoyang Chen
+ * @version 1.0.18.E1
+ *
+ * @see Serializable
  */
 public class CharacterData implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -43,7 +49,10 @@ public class CharacterData implements Serializable {
     private Map<String, Integer> enemyDefeatStats;
 
     /**
-     * Instantiates a default character
+     * Instantiates a default character with no provided args.
+     * This should be only used when you are trying to create the default player character Trailblazer
+     *
+     * @see Character
      */
     public CharacterData() {
         this.ownedCharacters = new HashMap<>();
@@ -57,7 +66,7 @@ public class CharacterData implements Serializable {
         this.lastPlayed = new Date();
         this.playerName = "Trailblazer";
         this.playerLevel = 1;
-        this.achievementsUnlocked = 0; //achieve systems implement in future (?)
+        this.achievementsUnlocked = 0; // achievement WIP
         this.totalBattles = 0;
         this.battlesWon = 0;
         this.currentChapter = 1;
@@ -199,9 +208,9 @@ public class CharacterData implements Serializable {
     public int getBattlesWon() { return battlesWon; }
 
     /**
-     * Gets win rate.
+     * Gets win rate for player
      *
-     * @return the win rate
+     * @return the win rate for player
      */
     public double getWinRate() {
         return totalBattles > 0 ? (double) battlesWon / totalBattles * 100 : 0;
@@ -314,7 +323,7 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Add characters to list with character id and character.
+     * Add characters to list with character name and character data
      *
      * @param characterId the character name
      * @param character   the character data
@@ -381,7 +390,7 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Equip item boolean equip
+     * Equip item to a character, also returns a boolean indicating the equipping process
      *
      * @param characterId the character id
      * @param equipment   the equipment to equip
@@ -416,7 +425,7 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Unequip item boolean.
+     * Unequip item from a character with provided character name and slot, also returns a boolean indicating the unequipping process
      *
      * @param characterId the character id
      * @param slotType    the slot type
@@ -453,9 +462,9 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Level up character by experience amount
+     * Level up character by a specific experience amount
      *
-     * @param characterId the character id
+     * @param characterId the character name
      * @param exp         the exp to add to character
      */
     public void levelUpCharacter(String characterId, int exp) {
@@ -476,10 +485,10 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Increase friendship of character
+     * Increase friendship of character by provided amount
      *
-     * @param characterId the character id
-     * @param amount      the amount
+     * @param characterId the character name
+     * @param amount      the amount to add
      */
     public void increaseFriendship(String characterId, int amount) {
         if (friendshipLevels.containsKey(characterId)) {
@@ -492,9 +501,9 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Unlock skill for character
+     * Unlock skill for character with name and skill id
      *
-     * @param characterId the character id
+     * @param characterId the character name
      * @param skillId     the skill id
      */
     public void unlockSkill(String characterId, int skillId) {
@@ -509,7 +518,7 @@ public class CharacterData implements Serializable {
      *
      * @param characterId the character id
      * @param skillId     the skill id
-     * @return the boolean indicating whether the skill is unlocaed or not
+     * @return the boolean indicating whether the skill is unlocked or not
      */
     public boolean isSkillUnlocked(String characterId, int skillId) {
         String key = characterId + "_skill_" + skillId;
@@ -530,7 +539,7 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Track enemy defeat.
+     * Track whether the enemy is defeated or not
      *
      * @param enemyType the enemy type
      */
@@ -634,7 +643,7 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Add energy to player
+     * Add energy to player, note that the max for character energy is 240
      *
      * @param amount the amount to add
      */
@@ -660,9 +669,9 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Record battle.
+     * Record battle win (specifically to record win rate)
      *
-     * @param won the won
+     * @param won status of the battle, true for win
      */
     public void recordBattle(boolean won) {
         totalBattles++;
@@ -673,7 +682,7 @@ public class CharacterData implements Serializable {
 
 
     /**
-     * Print statistics.
+     * Print statistics for the game, include player stats, win rates, owned characters, and currencies in game
      */
     public void printStatistics() {
         System.out.println("=== Game Stats ===");
@@ -691,7 +700,7 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Print character details.
+     * Print character details with provided character name
      *
      * @param characterId the character id
      */
@@ -728,7 +737,7 @@ public class CharacterData implements Serializable {
             }
         }
 
-        // display inventory
+        // display inventory of the character
         List<Item> inventory = characterInventories.get(characterId);
         if (inventory != null && !inventory.isEmpty()) {
             System.out.println("Inventory (Tot. " + inventory.size() + " items):");
@@ -742,10 +751,10 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Save to file.
+     * Save everything to a file
      *
      * @param filename the filename
-     * @throws IOException the io exception
+     * @throws IOException IOException if something is wrong during the saving process
      */
     public void saveToFile(String filename) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(filename);
@@ -756,12 +765,15 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Load from file character data.
+     * Load from file for character data only
      *
-     * @param filename the filename
-     * @return the character data
-     * @throws IOException            the io exception
-     * @throws ClassNotFoundException the class not found exception
+     * @param filename the filename to read
+     * @return the character data read from the save
+     * @throws IOException            IOException when something is wrong during the reading process
+     * @throws ClassNotFoundException the class not found exception throws when something in the file is unexcepted
+     *
+     * @see IOException
+     * @see ClassNotFoundException
      */
     public static CharacterData loadFromFile(String filename) throws IOException, ClassNotFoundException {
         try (FileInputStream fis = new FileInputStream(filename);
