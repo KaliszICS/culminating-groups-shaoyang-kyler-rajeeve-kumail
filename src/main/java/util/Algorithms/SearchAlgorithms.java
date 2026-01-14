@@ -4,10 +4,26 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * The Search algorithms, of utilities. The purpose of this code is to search for items from the Item class
+ *
+ * @author Rajeeve Ravi
+ * @version 1.5
+ */
 public class SearchAlgorithms {
+    /**
+     * The constructor of searchAlgorithms.
+     */
     public SearchAlgorithms() {
     }
 
+    /**
+     *  The binary search with a provided item name
+     *
+     * @param items the items for list of items to searching
+     * @param name  the name for name of items
+     * @return the item if it doesn't exist
+     */
     public Item binarySearch(List<Item> items, String name) {
         if (items == null || items.isEmpty() || name == null) {
             return null;
@@ -31,6 +47,13 @@ public class SearchAlgorithms {
         return null;
     }
 
+    /**
+     * Sequential search with a provided item name
+     *
+     * @param items    the items list of items to searching
+     * @param criteria the criteria
+     * @return the list
+     */
     public List<Item> sequentialSearch(List<Item> items, String criteria) {
         if (items == null || items.isEmpty() || criteria == null) {
             return null;
@@ -43,6 +66,14 @@ public class SearchAlgorithms {
         return null;
     }
 
+    /**
+     * Recursive search with a provided item name and start index
+     *
+     * @param items    the items
+     * @param index    the index
+     * @param criteria the criteria
+     * @return the item
+     */
     public Item recursiveSearch(List<Item> items, int index, String criteria)
     {
         if (items == null || criteria == null) {
