@@ -469,7 +469,7 @@ public class GameData implements Serializable {
 }
 
 /**
- * The type Game settings.
+ * Represents the game settings in game.
  */
 class GameSettings implements Serializable {
     private static final long serialVersionUID = 2L;
@@ -484,7 +484,7 @@ class GameSettings implements Serializable {
     private String controlScheme;
 
     /**
-     * Instantiates a new Game settings.
+     * Open a new game settings will default setups.
      */
     public GameSettings() {
         this.volumeMaster = 80;
@@ -492,97 +492,96 @@ class GameSettings implements Serializable {
         this.volumeSfx = 75;
         this.language = "English";
         this.displayMode = "CommandLine";
-        this.graphicsQuality = 2; // 0=低, 1=中, 2=高
+        this.graphicsQuality = 2; // 0 = low, 1 = medium, 2 = high
         this.subtitlesEnabled = true;
         this.controlScheme = "default";
     }
 
     /**
-     * Gets volume master.
+     * Gets master volume
      *
-     * @return the volume master
+     * @return the master volume
      */
-// Getter 和 Setter 方法
     public int getVolumeMaster() {
         return volumeMaster;
     }
 
     /**
-     * Sets volume master.
+     * Sets master volume
      *
-     * @param volumeMaster the volume master
+     * @param volumeMaster the master volume
      */
     public void setVolumeMaster(int volumeMaster) {
         this.volumeMaster = Math.max(0, Math.min(100, volumeMaster));
     }
 
     /**
-     * Gets volume music.
+     * Gets music volume
      *
-     * @return the volume music
+     * @return the music volume
      */
     public int getVolumeMusic() {
         return volumeMusic;
     }
 
     /**
-     * Sets volume music.
+     * Sets music volume
      *
-     * @param volumeMusic the volume music
+     * @param volumeMusic music volume
      */
     public void setVolumeMusic(int volumeMusic) {
         this.volumeMusic = Math.max(0, Math.min(100, volumeMusic));
     }
 
     /**
-     * Gets volume sfx.
+     * Gets sfx volume
      *
-     * @return the volume sfx
+     * @return the sfx volume
      */
     public int getVolumeSfx() {
         return volumeSfx;
     }
 
     /**
-     * Sets volume sfx.
+     * Sets sfx volume
      *
-     * @param volumeSfx the volume sfx
+     * @param volumeSfx the sfx volume
      */
     public void setVolumeSfx(int volumeSfx) {
         this.volumeSfx = Math.max(0, Math.min(100, volumeSfx));
     }
 
     /**
-     * Gets language.
+     * Gets language settings
      *
-     * @return the language
+     * @return the language settings
      */
     public String getLanguage() {
         return language;
     }
 
     /**
-     * Sets language.
+     * Sets language settings
      *
-     * @param language the language
+     * @param language the language settings
      */
     public void setLanguage(String language) {
         this.language = language;
     }
 
     /**
-     * Gets display mode.
+     * Gets display mode in game
      *
-     * @return the display mode
+     * @return the display mode in game
      */
     public String getDisplayMode() {
         return displayMode;
     }
 
     /**
-     * Sets display mode.
+     * Sets display mode in game
      *
-     * @param displayMode the display mode
+     * @param displayMode the display mode in game
      */
     public void setDisplayMode(String displayMode) {
         this.displayMode = displayMode;
@@ -607,18 +606,18 @@ class GameSettings implements Serializable {
     }
 
     /**
-     * Is subtitles enabled boolean.
+     * Check if subtitles are enabled
      *
-     * @return the boolean
+     * @return the boolean indicating whether the subtitles are enabled or not
      */
     public boolean isSubtitlesEnabled() {
         return subtitlesEnabled;
     }
 
     /**
-     * Sets subtitles enabled.
+     * Sets whether the subtitles are enabled or not
      *
-     * @param subtitlesEnabled the subtitles enabled
+     * @param subtitlesEnabled the boolean indicating whether the subtitles are enabled or not
      */
     public void setSubtitlesEnabled(boolean subtitlesEnabled) {
         this.subtitlesEnabled = subtitlesEnabled;
@@ -644,8 +643,8 @@ class GameSettings implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("音量: 主音量%d%%, 音乐%d%%, 音效%d%%, 语言:%s, 显示模式:%s, 画质:%d, 字幕:%s",
-                volumeMaster, volumeMusic, volumeSfx, language,
-                displayMode, graphicsQuality, subtitlesEnabled ? "开启" : "关闭");
+        return "Volume: Master " + volumeMaster + "%, Music " + volumeMusic + "%, SFX " + volumeSfx + "%, Language: " + language +
+                ", Display Mode: " + displayMode + ", Graphics Quality: " + graphicsQuality +
+                ", Subtitles: " + subtitlesEnabled;
     }
 }
