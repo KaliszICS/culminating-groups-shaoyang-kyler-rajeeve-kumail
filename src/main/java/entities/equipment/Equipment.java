@@ -3,6 +3,7 @@ package entities.equipment;
 import entities.items.Item;
 import entities.characters.Character;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,9 @@ import java.util.Map;
  * @see Character
  * @see Item
  */
-public abstract class Equipment extends Item {
+public abstract class Equipment extends Item implements Serializable {
+    //added serializable, so now people can save items to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     /**
      * The Required level for a character to equip this item
      */

@@ -1,5 +1,7 @@
 package entities.enemies;
 
+import java.io.Serializable;
+
 /**
  * This class represents a boss enemy, with attributes of if it has phases, the current phase, and phase messages.
  * Inherited from {@link Enemy}, therefore they have shared properties.
@@ -8,7 +10,9 @@ package entities.enemies;
  * @author Shaoyang Chen
  * @see Enemy
  */
-public class BossEnemy extends Enemy {
+public class BossEnemy extends Enemy implements Serializable {
+    //added serializable, so now people can save characters to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     private boolean hasPhases;
     private int currentPhase;
     private String[] phaseMessages;

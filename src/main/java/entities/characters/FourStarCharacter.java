@@ -7,6 +7,8 @@ package entities.characters;
  * @version 1.4.1
  */
 public class FourStarCharacter extends PlayableCharacter {
+    //added serializable, so now people can save characters to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     private boolean canBeObtainedFree;
 
     /**

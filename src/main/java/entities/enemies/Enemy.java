@@ -1,6 +1,8 @@
 package entities.enemies;
 import entities.abs.BattleUnit;
 import entities.items.Item;
+
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -14,7 +16,9 @@ import java.util.Random;
  * @see Item
  *
  */
-public class Enemy extends BattleUnit {
+public class Enemy extends BattleUnit implements Serializable {
+    //added serializable, so now people can save characters to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     /**
      * The Difficulty level.
      */

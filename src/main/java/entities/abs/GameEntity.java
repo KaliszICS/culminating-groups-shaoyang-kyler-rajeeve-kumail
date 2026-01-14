@@ -2,6 +2,8 @@ package entities.abs;
 
 import entities.Displayable;
 
+import java.io.Serializable;
+
 /**
  * Represents an abstract class for all game entities.
  * Implements the {@link Displayable} interface to provide CSV formats.
@@ -14,7 +16,8 @@ import entities.Displayable;
  * @version 1.4.1
  * @see Displayable
  */
-public abstract class GameEntity implements Displayable {
+public abstract class GameEntity implements Displayable, Serializable {
+    private static final long serialVersionUID = 1L;
     protected String name;
     protected int id;
     protected String description;

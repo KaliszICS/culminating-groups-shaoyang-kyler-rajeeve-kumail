@@ -2,6 +2,8 @@ package entities.equipment;
 
 import entities.characters.Character;
 
+import java.io.Serializable;
+
 /**
  * Represents the equipment type Relic,
  * Relics have extra attributes compared to equipment: setBonus, setPiecesRequired, relicSet.
@@ -14,7 +16,9 @@ import entities.characters.Character;
  * @see Equipment
  * @see Character
  */
-public class Relic extends Equipment {
+public class Relic extends Equipment implements Serializable {
+    //added serializable, so now people can save items to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     private String setBonus;
     private int setPiecesRequired;
     private String relicSet; // relic set name

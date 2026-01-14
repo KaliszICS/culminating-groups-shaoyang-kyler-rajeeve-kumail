@@ -70,6 +70,8 @@ public class GamePlay {
             if (saves.isEmpty()) {
                 System.out.println("No save files found. Starting new game...");
                 characterData = new CharacterData();
+                currentGameData = new GameData();
+                currentGameData.setCharacterData(characterData);
             } else {
                 System.out.println("Available saves:");
                 for (int i = 0; i < saves.size(); i++) {
@@ -80,21 +82,36 @@ public class GamePlay {
                     int slot = Integer.parseInt(scanner.nextLine());
                     currentGameData = saveManager.loadGame(slot);
                     if (currentGameData != null) {
+                        // Fixed Character Data properly install. update: 2026/1/13
+                        characterData = currentGameData.getCharacterData();
+                        if (characterData == null) {
+                            System.out.println("Warning: No character data found in save. Initializing new character data...");
+                            characterData = new CharacterData();
+                            currentGameData.setCharacterData(characterData);
+                        }
                         System.out.println("Game loaded successfully!");
+                        System.out.println("Loaded " + characterData.getOwnedCharacters().size() + " characters");
                     } else {
                         System.out.println("Failed to load save. Starting new game...");
                         characterData = new CharacterData();
+                        currentGameData = new GameData();
+                        currentGameData.setCharacterData(characterData);
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input. Starting new game...");
                     characterData = new CharacterData();
+                    currentGameData = new GameData();
+                    currentGameData.setCharacterData(characterData);
                 }
             }
         } else {
             System.out.println("Starting new game...");
             characterData = new CharacterData();
+            currentGameData = new GameData();
+            currentGameData.setCharacterData(characterData);
         }
     }
+
 
     public void start() {
         clearScreen();
@@ -1140,9 +1157,15 @@ public class GamePlay {
     }
 
     private void saveGame() {
+        // added: character data now saves into gameData.
+        // (prevent nullpointer when loading a game, since previously characterdata isn't saved, causing a nullpointer when using "character" classes and methods)
+        currentGameData.setCharacterData(characterData);
+        currentGameData.setSaveDate(new Date());
+
         boolean success = saveManager.saveGame(currentGameData);
         if (success) {
             System.out.println("Game saved successfully!");
+            System.out.println("Saved " + characterData.getOwnedCharacters().size() + " characters");
         } else {
             System.out.println("Failed to save game!");
         }
@@ -1166,7 +1189,15 @@ public class GamePlay {
             int slot = Integer.parseInt(scanner.nextLine());
             currentGameData = saveManager.loadGame(slot);
             if (currentGameData != null) {
+                // Character data should be loaded right now
+                characterData = currentGameData.getCharacterData();
+                if (characterData == null) {
+                    System.out.println("Warning: No character data found in save. Initializing new character data...");
+                    characterData = new CharacterData();
+                    currentGameData.setCharacterData(characterData);
+                }
                 System.out.println("Game loaded successfully!");
+                System.out.println("Loaded " + characterData.getOwnedCharacters().size() + " characters");
             } else {
                 System.out.println("Failed to load save!");
             }
