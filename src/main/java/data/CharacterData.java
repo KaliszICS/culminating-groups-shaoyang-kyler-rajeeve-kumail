@@ -548,13 +548,13 @@ public class CharacterData implements Serializable {
         achievementsUnlocked++;
         // rewards when complete a mission
         credits += 5000;
-        stellarJade += 100;
+        stellarJade += 150;
         System.out.println("Completed mission: " + missionId);
-        System.out.println("Rewards: 5000 credits, 100 stellarJade");
+        System.out.println("Rewards: 5000 credits, 150 stellarJade");
     }
 
     /**
-     * Unlock area.
+     * Unlock area for character to explore
      *
      * @param areaName the area name
      */
@@ -594,10 +594,10 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Spend stellar jade boolean.
+     * Spend stellar jade, will also return the status indicating whether the process was successful
      *
-     * @param amount the amount
-     * @return the boolean
+     * @param amount the amount to spend
+     * @return the boolean indicating whether it have sufficient amount
      */
     public boolean spendStellarJade(int amount) {
         if (stellarJade >= amount) {
@@ -609,7 +609,7 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Add credits.
+     * Add credits to player
      *
      * @param amount the amount
      */
@@ -619,10 +619,10 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Spend credits boolean.
+     * Spend credits boolean, will also return the status indicating whether the process was successful
      *
-     * @param amount the amount
-     * @return the boolean
+     * @param amount the amount to spend
+     * @return the boolean indicating whether it have sufficient amount
      */
     public boolean spendCredits(int amount) {
         if (credits >= amount) {
@@ -634,9 +634,9 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Add energy.
+     * Add energy to player
      *
-     * @param amount the amount
+     * @param amount the amount to add
      */
     public void addEnergy(int amount) {
         energy += amount;
@@ -645,10 +645,10 @@ public class CharacterData implements Serializable {
     }
 
     /**
-     * Spend energy boolean.
+     * Spend energy from the character, will also return the status indicating whether the process was successful
      *
-     * @param amount the amount
-     * @return the boolean
+     * @param amount the amount spend
+     * @return the boolean indicating whether it have sufficient amount
      */
     public boolean spendEnergy(int amount) {
         if (energy >= amount) {
