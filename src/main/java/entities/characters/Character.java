@@ -18,19 +18,19 @@ public class Character extends BattleUnit implements Serializable {
     //added serializable, so now people can save characters to a file (updated on 2026/1/13 emergency update)
     private static final long serialVersionUID = 1L;
     /**
-     * The Level.
+     * The Level of character
      */
     protected int level;
     /**
-     * The Experience.
+     * The Experience amount of character
      */
     protected int experience;
     /**
-     * The Equipped items.
+     * The Equipped items list of a character
      */
     protected Equipment[] equippedItems;
     /**
-     * The Skill tree.
+     * The Skill tree of character
      */
     protected SkillTree skillTree;
 

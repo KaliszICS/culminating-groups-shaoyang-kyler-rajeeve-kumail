@@ -6,7 +6,9 @@ import entities.characters.*;
 
 import java.util.List;
 
-// TestGachaSystemExtended.java
+
+
+//test gacha functionality, this class was written by AI, and it is for debug only
 public class TestGachaSystemExtended {
     public static void main(String[] args) {
         System.out.println("=== 扩展的抽卡系统测试 ===\n");

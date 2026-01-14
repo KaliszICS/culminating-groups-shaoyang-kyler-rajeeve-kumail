@@ -129,7 +129,7 @@ public class GamePlay {
     private void showMainMenu() {
         clearScreen();
         System.out.println("╔═══════════════════════════════════════════════════════════╗\n" +
-                "║                        MAIN MENU                         ║\n" +
+                "║                        MAIN MENU                          ║\n" +
                 "╠═══════════════════════════════════════════════════════════╣\n" +
                 "║ 1. Continue Adventure                                     ║\n" +
                 "║ 2. Character Management                                   ║\n" +
@@ -412,10 +412,12 @@ public class GamePlay {
     private void gachaMenu() {
         clearScreen();
         System.out.println("=== GACHA SYSTEM ===");
-        System.out.println("1. Single Pull");
-        System.out.println("2. Ten Pull");
-        System.out.println("3. View Gacha Statistics");
-        System.out.println("4. Return to Main Menu");
+        System.out.println("1. Single Pull (Items)");
+        System.out.println("2. Ten Pull (Item)");
+        System.out.println("3. Single Pull (Characters)");
+        System.out.println("4. Ten Pull (Characters)");
+        System.out.println("5. View Gacha Statistics");
+        System.out.println("6. Return to Main Menu");
 
         System.out.print("Select: ");
         String choice = scanner.nextLine();
@@ -428,9 +430,15 @@ public class GamePlay {
                 performTenPull();
                 break;
             case "3":
-                gachaSystem.printStatistics();
+                performSinglePullCharacter();
                 break;
             case "4":
+                performTenPullCharacter();
+                break;
+            case "5":
+                gachaSystem.printStatistics();
+                break;
+            case "6":
                 return;
             default:
                 System.out.println("Invalid choice!");
@@ -444,12 +452,24 @@ public class GamePlay {
         System.out.println("Obtained: " + item.getName());
         playerInventory.addItem(item);
     }
+    private void performSinglePullCharacter() {
+        Character character = gachaSystem.pullSingleCharacter();
+        System.out.println("Obtained: " + character.getName());
+        characterData.addCharacter(character.getName(), character);
+    }
 
     private void performTenPull() {
         List<Item> items = gachaSystem.pullTen();
         System.out.println("Obtained " + items.size() + " items");
         for (Item item : items) {
             playerInventory.addItem(item);
+        }
+    }
+    private void performTenPullCharacter() {
+        List<Character> characters = gachaSystem.pullTenCharacter();
+        System.out.println("Obtained: " + characters.size() + " characters");
+        for (Character setCharacters : characters) {
+            characterData.addCharacter(setCharacters.getName(), setCharacters);
         }
     }
     private void battleMenu() {

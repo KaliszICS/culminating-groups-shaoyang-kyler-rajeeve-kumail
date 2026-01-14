@@ -1,21 +1,40 @@
 package systems.gacha;
 
+/**
+ * Represents the pity system in the gacha system in game.
+ * This will help players to obtain rare items and characters easier.
+ *
+ * @author Shaoyang Chen
+ * @version 1.0.3
+ */
 public class PitySystem {
     private int fiveStarPity;
     private int fourStarPity;
     private boolean guaranteeFlag;
 
+    /**
+     * Instantiates a new Pity system (this system does not need an arg)
+     * in default, all pities are set to 0
+     */
     public PitySystem() {
         fiveStarPity = 0;
         fourStarPity = 0;
         guaranteeFlag = false;
     }
 
+    /**
+     * Increase pity count in each counter
+     */
     public void incrementPity() {
         fiveStarPity++;
         fourStarPity++;
     }
 
+    /**
+     * Reset pity for a specific rarity
+     *
+     * @param rarity the rarity of pity you want to reset
+     */
     public void resetPity(int rarity) {
         switch (rarity) {
             case 5:
@@ -27,14 +46,18 @@ public class PitySystem {
         }
     }
 
+    /**
+     * Check guarantee if it is time for player to obtain a 4/5 star item/character
+     *
+     * @return the representing whether conditions for guarantee is active
+     */
     public boolean checkGuarantee() {
-        // 检查5星硬保底
         if (fiveStarPity >= 90) {
             guaranteeFlag = true;
             return true;
         }
 
-        // 检查4星保底
+
         if (fourStarPity >= 10) {
             return true;
         }
@@ -42,21 +65,42 @@ public class PitySystem {
         return false;
     }
 
+    /**
+     * Calculate soft pity double.
+     *
+     * @return the double
+     */
     public double calculateSoftPity() {
-        // 75抽后开始计算软保底概率
+        // calculate soft pity for five stars after 75
         if (fiveStarPity < 75) {
-            return 0.006; // 基础概率0.6%
+            return 0.006;
         }
 
-        int softPityCount = fiveStarPity - 74; // 75抽时开始计算
-        double increasedRate = 0.006 + (softPityCount * 0.06); // 每抽增加6%
+        int softPityCount = fiveStarPity - 74;
+        double increasedRate = 0.006 + (softPityCount * 0.06); //add 6% each pull
 
-        // 确保概率不超过100%
+        // possibility cannot exceed 100%
         return Math.min(increasedRate, 1.0);
     }
 
-    // Getter方法
+    /**
+     * Gets five star pity.
+     *
+     * @return the five star pity
+     */
     public int getFiveStarPity() { return fiveStarPity; }
+
+    /**
+     * Gets four star pity.
+     *
+     * @return the four star pity
+     */
     public int getFourStarPity() { return fourStarPity; }
+
+    /**
+     * Gets guarantee status flag.
+     *
+     * @return the guarantee flag
+     */
     public boolean getGuaranteeFlag() { return guaranteeFlag; }
 }

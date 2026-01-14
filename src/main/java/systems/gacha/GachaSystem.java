@@ -219,12 +219,12 @@ public class GachaSystem {
     private Character getRandomCharacterByRarity(int rarity) {
         switch (rarity) {
             case 5:
-                String[] fiveStarNames = {"姬子", "瓦尔特", "布洛妮娅", "杰帕德", "希儿", "景元"};
+                String[] fiveStarNames = {"Himeko", "Welt Yang", "Bronya", "Gepard", "Seele", "Jingyuan"};
                 return new FiveStarCharacter(fiveStarNames[random.nextInt(fiveStarNames.length)]);
 
             case 4:
             default:
-                String[] fourStarNames = {"希露瓦", "佩拉", "卢卡", "虎克", "素裳", "阿兰"};
+                String[] fourStarNames = {"Serval", "Pela", "Luca", "Hook", "Sushang", "Arlan"};
                 return new FourStarCharacter(fourStarNames[random.nextInt(fourStarNames.length)], true);
         }
     }
@@ -255,42 +255,42 @@ public class GachaSystem {
     private Item getRandomItemByRarity(int rarity) {
         switch (rarity) {
             case 5:
-                // 50% of pulling lightcone, 50% of pulling material item
+                // 50% chance of pulling a light cone, 50% chance of pulling a material item
                 if (random.nextBoolean()) {
-                    String[] names = {"银河铁道之夜", "无可取代的东西", "但战斗还未结束"};
-                    String[] paths = {"智识", "毁灭", "同谐"};
+                    String[] names = {"Night of Galactic Railway", "Something Irreplaceable", "But the Battle Isn't Over"};
+                    String[] paths = {"Erudition", "Destruction", "Harmony"};
                     LightCone lc = new LightCone(names[random.nextInt(names.length)],
                             paths[random.nextInt(paths.length)]);
                     lc.setRequiredLevel(60);
                     lc.setValue(1000);
                     return lc;
                 } else {
-                    String[] names = {"传说材料", "史诗材料", "稀有材料"};
+                    String[] names = {"Legendary Material", "Epic Material", "Rare Material"};
                     MaterialItem item = new MaterialItem(names[random.nextInt(names.length)],
-                            "稀有材料", 5, 800);
+                            "Rare Material", 5, 800);
                     return item;
                 }
             case 4:
-                // the same rule as 5 star
+                // the same rule as 5-star
                 if (random.nextBoolean()) {
-                    String[] names = {"早餐的仪式感", "唯有沉默", "记忆中的模样"};
-                    String[] paths = {"智识", "巡猎", "同谐"};
+                    String[] names = {"Morning Ritual", "Only Silence Remains", "Memories of the Past"};
+                    String[] paths = {"Erudition", "The Hunt", "Harmony"};
                     LightCone lc = new LightCone(names[random.nextInt(names.length)],
                             paths[random.nextInt(paths.length)]);
                     lc.setRequiredLevel(40);
                     lc.setValue(400);
                     return lc;
                 } else {
-                    String[] names = {"高级材料", "中级材料", "基础材料"};
+                    String[] names = {"Advanced Material", "Intermediate Material", "Basic Material"};
                     MaterialItem item = new MaterialItem(names[random.nextInt(names.length)],
-                            "普通材料", 4, 300);
+                            "Common Material", 4, 300);
                     return item;
                 }
 
             case 3:
             default:
-                String[] names = {"信用点", "冒险记录", "旅情见闻", "提纯以太"};
-                String[] types = {"货币", "经验材料", "经验材料", "突破材料"};
+                String[] names = {"Credit", "Adventure Log", "Traveler's Guide", "Refined Aether"};
+                String[] types = {"Currency", "EXP Material", "EXP Material", "Ascension Material"};
                 int[] rarities = {1, 1, 2, 3};
                 int index = random.nextInt(names.length);
                 return new MaterialItem(names[index],
@@ -441,36 +441,19 @@ public class GachaSystem {
     /**
      * Print statistics.
      */
-// 显示统计信息
+        // Statistics printing
     public void printStatistics() {
-        System.out.println("=== 物品抽取统计 ===");
-        System.out.println("总抽数: " + pullHistory.size());
-        System.out.println("当前5星保底: " + pityCounter5Star + "/90");
-        System.out.println("当前4星保底: " + pityCounter4Star + "/10");
-        System.out.println("5星保底状态: " + (guaranteed5Star ? "触发" : "未触发"));
+        System.out.println("=== Item Pull Statistics ===");
+        System.out.println("Total Pulls: " + pullHistory.size());
+        System.out.println("Current 5-star Pity: " + pityCounter5Star + "/90");
+        System.out.println("Current 4-star Pity: " + pityCounter4Star + "/10");
+        System.out.println("5-star Guarantee Status: " + (guaranteed5Star ? "Triggered" : "Not Triggered"));
 
-        System.out.println("\n=== 角色抽取统计 ===");
-        System.out.println("总抽数: " + characterPullHistory.size());
-        System.out.println("角色5星保底: " + characterPitySystem.getFiveStarPity() + "/90");
-        System.out.println("角色4星保底: " + characterPitySystem.getFourStarPity() + "/10");
-        System.out.println("角色保底标志: " + characterPitySystem.getGuaranteeFlag());
-
-        // 计算概率
-        if (pullHistory.size() > 0) {
-            long fiveStarItems = pullHistory.stream()
-                    .filter(record -> record.contains("5星保底:0"))
-                    .count();
-            System.out.println(String.format("\n物品5星出货率: %.2f%%",
-                    (fiveStarItems * 100.0) / pullHistory.size()));
-        }
-
-        if (characterPullHistory.size() > 0) {
-            long fiveStarCharacters = characterPullHistory.stream()
-                    .filter(record -> record.contains("稀有度:5星"))
-                    .count();
-            System.out.println(String.format("角色5星出货率: %.2f%%",
-                    (fiveStarCharacters * 100.0) / characterPullHistory.size()));
-        }
+        System.out.println("\n=== Character Pull Statistics ===");
+        System.out.println("Total Pulls: " + characterPullHistory.size());
+        System.out.println("Character 5-star Pity: " + characterPitySystem.getFiveStarPity() + "/90");
+        System.out.println("Character 4-star Pity: " + characterPitySystem.getFourStarPity() + "/10");
+        System.out.println("Character Guarantee Flag: " + characterPitySystem.getGuaranteeFlag());
     }
 
     private String comeOnJustStarrrrrrrrs (int numOfStars) {

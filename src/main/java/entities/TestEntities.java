@@ -6,7 +6,7 @@ import entities.equipment.*;
 import entities.items.*;
 import entities.enemies.*;
 
-
+//test entities functionality, this class was written by AI, and it is for debug only
 public class TestEntities {
     public static void main(String[] args) {
         System.out.println("===== ENTITIES PACKAGE TEST =====\n");

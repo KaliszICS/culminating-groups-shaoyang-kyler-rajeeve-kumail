@@ -8,6 +8,9 @@ import systems.inventory.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Represents character data in game, including all attributes of the character and also game history for the character
+ */
 public class CharacterData implements Serializable {
     private static final long serialVersionUID = 1L;
     private Map<String, Character> ownedCharacters;
@@ -39,6 +42,9 @@ public class CharacterData implements Serializable {
     private Map<String, Integer> skillUsageStats;
     private Map<String, Integer> enemyDefeatStats;
 
+    /**
+     * Instantiates a default character
+     */
     public CharacterData() {
         this.ownedCharacters = new HashMap<>();
         this.characterInventories = new HashMap<>();
@@ -71,48 +77,218 @@ public class CharacterData implements Serializable {
         // Default Characters
         initializeDefaultCharacters();
     }
-    // Getter/setter
+
+    /**
+     * Gets a map(table) of owned characters
+     *
+     * @return the owned characters map
+     */
+
     public Map<String, Character> getOwnedCharacters() { return ownedCharacters; }
+
+    /**
+     * Gets a map(table) of character inventories.
+     *
+     * @return the character's name and inventories
+     */
     public Map<String, List<Item>> getCharacterInventories() { return characterInventories; }
+
+    /**
+     * Gets equipped items of the character
+     *
+     * @return the equipped items in a map
+     */
     public Map<String, Equipment[]> getEquippedItems() { return equippedItems; }
+
+    /**
+     * Gets character's levels
+     *
+     * @return the character levels
+     */
     public Map<String, Integer> getCharacterLevels() { return characterLevels; }
+
+    /**
+     * Gets character exp remaining
+     *
+     * @return the character exp
+     */
     public Map<String, Integer> getCharacterExp() { return characterExp; }
+
+    /**
+     * Gets friendship levels.
+     *
+     * @return the friendship levels
+     */
     public Map<String, Integer> getFriendshipLevels() { return friendshipLevels; }
 
+    /**
+     * Gets total game time.
+     *
+     * @return the total game time
+     */
     public int getTotalGameTime() { return totalGameTime; }
+
+    /**
+     * Sets total game time.
+     *
+     * @param time the time
+     */
     public void setTotalGameTime(int time) { this.totalGameTime = time; }
 
+    /**
+     * Gets last played.
+     *
+     * @return the last played
+     */
     public Date getLastPlayed() { return lastPlayed; }
+
+    /**
+     * Sets last played.
+     *
+     * @param date the date
+     */
     public void setLastPlayed(Date date) { this.lastPlayed = date; }
 
+    /**
+     * Gets player name.
+     *
+     * @return the player name
+     */
     public String getPlayerName() { return playerName; }
+
+    /**
+     * Sets player name.
+     *
+     * @param name the name
+     */
     public void setPlayerName(String name) { this.playerName = name; }
 
+    /**
+     * Gets player level.
+     *
+     * @return the player level
+     */
     public int getPlayerLevel() { return playerLevel; }
+
+    /**
+     * Sets player level.
+     *
+     * @param level the level
+     */
     public void setPlayerLevel(int level) { this.playerLevel = level; }
 
+    /**
+     * Gets achievements unlocked.
+     *
+     * @return the achievements unlocked
+     */
     public int getAchievementsUnlocked() { return achievementsUnlocked; }
+
+    /**
+     * Gets total battles.
+     *
+     * @return the total battles
+     */
     public int getTotalBattles() { return totalBattles; }
+
+    /**
+     * Gets battles won.
+     *
+     * @return the battles won
+     */
     public int getBattlesWon() { return battlesWon; }
+
+    /**
+     * Gets win rate.
+     *
+     * @return the win rate
+     */
     public double getWinRate() {
         return totalBattles > 0 ? (double) battlesWon / totalBattles * 100 : 0;
     }
 
+    /**
+     * Gets current chapter.
+     *
+     * @return the current chapter
+     */
     public int getCurrentChapter() { return currentChapter; }
+
+    /**
+     * Sets current chapter.
+     *
+     * @param chapter the chapter
+     */
     public void setCurrentChapter(int chapter) { this.currentChapter = chapter; }
 
+    /**
+     * Gets current mission.
+     *
+     * @return the current mission
+     */
     public int getCurrentMission() { return currentMission; }
+
+    /**
+     * Sets current mission.
+     *
+     * @param mission the mission
+     */
     public void setCurrentMission(int mission) { this.currentMission = mission; }
 
+    /**
+     * Gets completed missions.
+     *
+     * @return the completed missions
+     */
     public Set<String> getCompletedMissions() { return completedMissions; }
+
+    /**
+     * Gets unlocked areas.
+     *
+     * @return the unlocked areas
+     */
     public Set<String> getUnlockedAreas() { return unlockedAreas; }
 
+    /**
+     * Gets stellar jade.
+     *
+     * @return the stellar jade
+     */
     public int getStellarJade() { return stellarJade; }
+
+    /**
+     * Gets credits.
+     *
+     * @return the credits
+     */
     public int getCredits() { return credits; }
+
+    /**
+     * Gets energy.
+     *
+     * @return the energy
+     */
     public int getEnergy() { return energy; }
 
+    /**
+     * Gets item usage stats.
+     *
+     * @return the item usage stats
+     */
     public Map<String, Integer> getItemUsageStats() { return itemUsageStats; }
+
+    /**
+     * Gets skill usage stats.
+     *
+     * @return the skill usage stats
+     */
     public Map<String, Integer> getSkillUsageStats() { return skillUsageStats; }
+
+    /**
+     * Gets enemy defeat stats.
+     *
+     * @return the enemy defeat stats
+     */
     public Map<String, Integer> getEnemyDefeatStats() { return enemyDefeatStats; }
 
     private void initializeDefaultCharacters() {
@@ -137,6 +313,12 @@ public class CharacterData implements Serializable {
         unlockSkill("Dan Heng", 0);
     }
 
+    /**
+     * Add characters to list with character id and character.
+     *
+     * @param characterId the character name
+     * @param character   the character data
+     */
     public void addCharacter(String characterId, Character character) {
         ownedCharacters.put(characterId, character);
         characterLevels.put(characterId, character.getLevel());
@@ -170,6 +352,12 @@ public class CharacterData implements Serializable {
 //        return false;
 //    }
 
+    /**
+     * Add item to character.
+     *
+     * @param characterId the character id
+     * @param item        the item to add
+     */
     public void addItemToCharacter(String characterId, Item item) {
         if (!characterInventories.containsKey(characterId)) {
             characterInventories.put(characterId, new ArrayList<>());
@@ -180,12 +368,25 @@ public class CharacterData implements Serializable {
         System.out.println("Character " + characterId + " Obtained Item: " + item.getName());
     }
 
+    /**
+     * Remove item from character.
+     *
+     * @param characterId the character id
+     * @param item        the item to remove
+     */
     public void removeItemFromCharacter(String characterId, Item item) {
         if (characterInventories.containsKey(characterId)) {
             characterInventories.get(characterId).remove(item);
         }
     }
 
+    /**
+     * Equip item boolean equip
+     *
+     * @param characterId the character id
+     * @param equipment   the equipment to equip
+     * @return the boolean indicating equip status
+     */
     public boolean equipItem(String characterId, Equipment equipment) {
         if (!ownedCharacters.containsKey(characterId)) {
             System.out.println("Character not exist: " + characterId);
@@ -214,6 +415,13 @@ public class CharacterData implements Serializable {
         return true;
     }
 
+    /**
+     * Unequip item boolean.
+     *
+     * @param characterId the character id
+     * @param slotType    the slot type
+     * @return the boolean indicating unequip status
+     */
     public boolean unequipItem(String characterId, String slotType) {
         if (!ownedCharacters.containsKey(characterId)) {
             return false;
@@ -243,8 +451,13 @@ public class CharacterData implements Serializable {
             default: return -1;
         }
     }
-    //check if lvled up
 
+    /**
+     * Level up character by experience amount
+     *
+     * @param characterId the character id
+     * @param exp         the exp to add to character
+     */
     public void levelUpCharacter(String characterId, int exp) {
         if (!characterExp.containsKey(characterId)) {
             return;
@@ -262,6 +475,12 @@ public class CharacterData implements Serializable {
         characterLevels.put(characterId, currentLevel);
     }
 
+    /**
+     * Increase friendship of character
+     *
+     * @param characterId the character id
+     * @param amount      the amount
+     */
     public void increaseFriendship(String characterId, int amount) {
         if (friendshipLevels.containsKey(characterId)) {
             int currentFriendship = friendshipLevels.get(characterId);
@@ -272,6 +491,12 @@ public class CharacterData implements Serializable {
         }
     }
 
+    /**
+     * Unlock skill for character
+     *
+     * @param characterId the character id
+     * @param skillId     the skill id
+     */
     public void unlockSkill(String characterId, int skillId) {
         String key = characterId + "_skill_" + skillId;
         unlockedSkills.put(key, true);
@@ -279,6 +504,13 @@ public class CharacterData implements Serializable {
         System.out.println("Unlocked " + characterId + "'s skill " + skillId);
     }
 
+    /**
+     * Check if a specific skill is unlocked
+     *
+     * @param characterId the character id
+     * @param skillId     the skill id
+     * @return the boolean indicating whether the skill is unlocaed or not
+     */
     public boolean isSkillUnlocked(String characterId, int skillId) {
         String key = characterId + "_skill_" + skillId;
         return unlockedSkills.getOrDefault(key, false);
@@ -288,14 +520,29 @@ public class CharacterData implements Serializable {
         itemUsageStats.put(itemName, itemUsageStats.getOrDefault(itemName, 0) + 1);
     }
 
+    /**
+     * Track skill usage.
+     *
+     * @param skillName the skill name
+     */
     public void trackSkillUsage(String skillName) {
         skillUsageStats.put(skillName, skillUsageStats.getOrDefault(skillName, 0) + 1);
     }
 
+    /**
+     * Track enemy defeat.
+     *
+     * @param enemyType the enemy type
+     */
     public void trackEnemyDefeat(String enemyType) {
         enemyDefeatStats.put(enemyType, enemyDefeatStats.getOrDefault(enemyType, 0) + 1);
     }
 
+    /**
+     * Complete mission.
+     *
+     * @param missionId the mission id
+     */
     public void completeMission(String missionId) {
         completedMissions.add(missionId);
         achievementsUnlocked++;
@@ -306,24 +553,52 @@ public class CharacterData implements Serializable {
         System.out.println("Rewards: 5000 credits, 100 stellarJade");
     }
 
+    /**
+     * Unlock area.
+     *
+     * @param areaName the area name
+     */
     public void unlockArea(String areaName) {
         unlockedAreas.add(areaName);
         System.out.println("Unlocked new area: " + areaName);
     }
 
+    /**
+     * Sets story flag.
+     *
+     * @param flag  the flag
+     * @param value the value
+     */
     public void setStoryFlag(String flag, boolean value) {
         storyFlags.put(flag, value);
     }
 
+    /**
+     * Gets story flag.
+     *
+     * @param flag the flag
+     * @return the story flag
+     */
     public boolean getStoryFlag(String flag) {
         return storyFlags.getOrDefault(flag, false);
     }
 
+    /**
+     * Add stellar jade.
+     *
+     * @param amount the amount
+     */
     public void addStellarJade(int amount) {
         stellarJade += amount;
         System.out.println("Acquired " + amount + " Stellar Jades, Amount remaining: " + stellarJade);
     }
 
+    /**
+     * Spend stellar jade boolean.
+     *
+     * @param amount the amount
+     * @return the boolean
+     */
     public boolean spendStellarJade(int amount) {
         if (stellarJade >= amount) {
             stellarJade -= amount;
@@ -333,11 +608,22 @@ public class CharacterData implements Serializable {
         return false;
     }
 
+    /**
+     * Add credits.
+     *
+     * @param amount the amount
+     */
     public void addCredits(int amount) {
         credits += amount;
         System.out.println("Acquired " + amount + " Credits, Amount remaining: " + credits);
     }
 
+    /**
+     * Spend credits boolean.
+     *
+     * @param amount the amount
+     * @return the boolean
+     */
     public boolean spendCredits(int amount) {
         if (credits >= amount) {
             credits -= amount;
@@ -347,12 +633,23 @@ public class CharacterData implements Serializable {
         return false;
     }
 
+    /**
+     * Add energy.
+     *
+     * @param amount the amount
+     */
     public void addEnergy(int amount) {
         energy += amount;
         energy = Math.min(energy, 240); // max energy is 240
         System.out.println("Added " + amount + " Energy, Current: " + energy);
     }
 
+    /**
+     * Spend energy boolean.
+     *
+     * @param amount the amount
+     * @return the boolean
+     */
     public boolean spendEnergy(int amount) {
         if (energy >= amount) {
             energy -= amount;
@@ -362,6 +659,11 @@ public class CharacterData implements Serializable {
         return false;
     }
 
+    /**
+     * Record battle.
+     *
+     * @param won the won
+     */
     public void recordBattle(boolean won) {
         totalBattles++;
         if (won) {
@@ -370,6 +672,9 @@ public class CharacterData implements Serializable {
     }
 
 
+    /**
+     * Print statistics.
+     */
     public void printStatistics() {
         System.out.println("=== Game Stats ===");
         System.out.println("Player: " + playerName);
@@ -385,6 +690,11 @@ public class CharacterData implements Serializable {
         System.out.println("Energy: " + energy);
     }
 
+    /**
+     * Print character details.
+     *
+     * @param characterId the character id
+     */
     public void printCharacterDetails(String characterId) {
         if (!ownedCharacters.containsKey(characterId)) {
             System.out.println("Character isn't exist: " + characterId);
@@ -431,6 +741,12 @@ public class CharacterData implements Serializable {
         }
     }
 
+    /**
+     * Save to file.
+     *
+     * @param filename the filename
+     * @throws IOException the io exception
+     */
     public void saveToFile(String filename) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(filename);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -439,6 +755,14 @@ public class CharacterData implements Serializable {
         }
     }
 
+    /**
+     * Load from file character data.
+     *
+     * @param filename the filename
+     * @return the character data
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public static CharacterData loadFromFile(String filename) throws IOException, ClassNotFoundException {
         try (FileInputStream fis = new FileInputStream(filename);
              ObjectInputStream ois = new ObjectInputStream(fis)) {
