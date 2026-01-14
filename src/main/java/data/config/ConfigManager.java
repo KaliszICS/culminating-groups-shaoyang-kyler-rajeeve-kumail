@@ -126,6 +126,12 @@ public class ConfigManager{
         return getDoubleProperty(key, 0.0);
     }
 
+    /**
+     * Gets a double configuration property by key with a default value
+     * @param key the configuration key
+     * @param defaultVal the default double value to return if the key does not exist or is not a valid double
+     * @return the double value associated with the key, or defaultVal if the key does not exist or is not a valid double
+     */
     public double getDoubleProperty(String key, double defaultVal) {
         String propDouble = configProps.getProperty(key);
         if (propDouble == null) return defaultVal;
@@ -136,11 +142,21 @@ public class ConfigManager{
             return defaultVal;
         }
     }
-
+    /**
+     * Gets a boolean configuration property by key
+     * @param key the configuration key
+     * @return the boolean value associated with the key, or false if the key does not exist
+     */
     public boolean getBooleanProperty(String key) {
         return getBooleanProperty(key, false);
     }
 
+    /**
+     * Gets a boolean configuration property by key with a default value
+     * @param key the configuration key
+     * @param fallback the default boolean value to return if the key does not exist
+     * @return the boolean value associated with the key, or fallback if the key does not exist
+     */
     public boolean getBooleanProperty(String key, boolean fallback) {
         String propbool = configProps.getProperty(key);
         if (propbool == null){
@@ -149,23 +165,47 @@ public class ConfigManager{
         return propbool.equalsIgnoreCase("true") || propbool.equals("1");
     }     
 
+    /**
+     * Sets a configuration property
+     * @param key the configuration key
+     * @param value the value to set for the key
+     */
     public void setProperty(String key, String value) {
         configProps.setProperty(key, value);
         System.out.println("Set configuration items: " + key + " = " + value);
     }
 
+    /**
+     * Sets a configuration property with an integer value
+     * @param key the configuration key
+     * @param value the integer value to set for the key
+     */
     public void setProperty(String key, int value) {
         setProperty(key, String.valueOf(value));
     }
-
+    /**
+     * Sets a configuration property with a double value
+     * @param key the configuration key
+     * @param value the double value to set for the key
+     */
     public void setProperty(String key, double value) {
         setProperty(key, String.valueOf(value));
     }
 
+    /**
+     * Sets a configuration property with a boolean value
+     * @param key the configuration key
+     * @param value the boolean value to set for the key
+     */
     public void setProperty(String key, boolean value) {
         setProperty(key, String.valueOf(value));
     }
 
+    /**
+     * Gets all configuration properties that start with the specified prefix
+     * @param prefix the prefix to filter configuration keys
+     * @return Properties object containing key-value pairs that start with the specified prefix
+     */
     public Properties getPropertiesByPrefix(String prefix) {
         Properties resultProps = new Properties();
 
@@ -179,15 +219,27 @@ public class ConfigManager{
         return resultProps;
     }
 
+    /**
+     * Removes a configuration property by key
+     * @param key the configuration key to remove
+     */
     public void removeProperty(String key) {
         configProps.remove(key);
         System.out.println("delete config item: " + key);
     }
 
+    /**
+     * Checks if a configuration property exists
+     * @param key the configuration key to check
+     * @return true if the property exists, false otherwise
+     */
     public boolean containsProperty(String key) {
         return configProps.containsKey(key);
     }
 
+    /**
+     * Saves the current configuration to the file using the FileHandler and prints whether it was successful or not
+     */
     public void saveConfig() {
 
         FileHandler fileHandler = new FileHandler();
@@ -216,17 +268,27 @@ public class ConfigManager{
         }
     }
     
+    /**
+     * Reloads the configuration from the file
+     */
     public void reload() {
         configProps.clear();
         loadConfig();
     }
 
+    /**
+     * Resets the configuration to default settings and saves it to the file
+     */
     public void resetToDefaults() {
         configProps.clear();
         setDefaultProperties();
         saveConfig();
     }
 
+    /**
+     * Validates the configuration settings
+     * @return true if the configuration is valid, false otherwise
+     */
     public boolean validateConfig() {
         boolean isValid = true;
 
@@ -258,6 +320,10 @@ public class ConfigManager{
         return isValid;
     }
 
+    /**
+     * Exports the configuration properties to a CSV file
+     * @param filename the name of the CSV file to export to
+     */
     public void exportToCSV(String filename) {
         FileHandler fileHandler = new FileHandler("CSV");
 
@@ -291,6 +357,11 @@ public class ConfigManager{
         }
     }
 
+    /**
+     * Imports configuration properties from a file
+     * @param importPath the path to the configuration file to import from
+     * @return true if the import was successful, false otherwise
+     */
     public boolean importFromFile(String importPath) {
         File importFile = new File(importPath);
         if (!importFile.exists() || !importFile.isFile()) {
@@ -318,6 +389,11 @@ public class ConfigManager{
         }
     }
 
+    /**
+     * Determines the type of a configuration value
+     * @param value the configuration value as a string
+     * @return the type of the value as a string (e.g., "integer", "double", "Boolean value", "string")
+     */
     private String getValueType(String value) {
         if (value == null) {
             return "unknown";
@@ -340,6 +416,9 @@ public class ConfigManager{
         }
     }
 
+    /**
+     * Prints a summary of the configuration information
+     */
    public void printConfigSummary() {
         System.out.println(" Summary of configuration information ");
         System.out.println("Configuration file path: " + configPath);
@@ -360,11 +439,20 @@ public class ConfigManager{
         System.out.println("\nConfiguration verification: " + (validateConfig() ? "✓ efficient" : "✗ invalid"));
     }
 
+    /**
+     * Backs up the current configuration to a backup file
+     * @return true if the backup was successful, false otherwise
+     */
     public boolean backupConfig() {
         String backupPath = configPath + ".backup_" + System.currentTimeMillis();
         return saveConfigTo(backupPath);
     }
 
+    /**
+     * Saves the configuration to a specified path
+     * @param path the path to save the configuration file
+     * @return true if the configuration was saved, false otherwise
+     */
     public boolean saveConfigTo(String path) {
         FileHandler fileHandler = new FileHandler();
         String data = "";
