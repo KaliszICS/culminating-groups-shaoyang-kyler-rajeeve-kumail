@@ -9,43 +9,37 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * 游戏数据类 - 包含所有需要保存的游戏状态信息
- * 实现Serializable接口以支持Java序列化
+ * Represents game data in this game. Includes player info, inventory info, game progress, gacha data, and system data.
+ * Implements {@link Serializable} so now game data could be written into a file
  */
 public class GameData implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    // 玩家信息
+    // player info
     private List<PlayableCharacter> playerCharacters;
     private PlayableCharacter currentMainCharacter;
-    // 添加 CharacterData 引用
     private CharacterData characterData;
-    // 背包数据
+    // inventory info
     private List<Item> inventoryItems;
     private int inventoryMaxWeight;
     private Map<String, List<Item>> equippedItemsByCharacter;
-
-    // 游戏进度
+    // game progress
     private int currentStoryProgress;
     private List<String> completedQuests;
     private List<String> unlockedLocations;
-
-    // 抽卡系统数据
+    // gachasystem data
     private int pityCounter5Star;
     private int pityCounter4Star;
     private boolean guaranteed5Star;
     private List<String> pullHistory;
-
-    // 游戏设置
     private GameSettings gameSettings;
-
-    // 系统数据
+    // system data
     private Date saveDate;
     private long playTimeInSeconds;
     private String gameVersion;
 
     /**
-     * 默认构造函数
+     * Instantiates a new Game data with no args
      */
     public GameData() {
         this.playerCharacters = new ArrayList<>();
@@ -66,7 +60,13 @@ public class GameData implements Serializable {
     }
 
     /**
-     * 完整构造函数
+     * Instantiates a new Game data with playerCharacters, inventoryItems, CurrentStoryProcess, and Playtime specified.
+     * Please use the default constructor unless you know what you are doing.
+     *
+     * @param playerCharacters     the player characters
+     * @param inventoryItems       the inventory items
+     * @param currentStoryProgress the current story progress
+     * @param playTimeInSeconds    the play time in seconds
      */
     public GameData(List<PlayableCharacter> playerCharacters, List<Item> inventoryItems, int currentStoryProgress, long playTimeInSeconds) {
         this();
@@ -76,146 +76,317 @@ public class GameData implements Serializable {
         this.playTimeInSeconds = playTimeInSeconds;
     }
 
-    // Getter 和 Setter 方法
 
+    /**
+     * Gets player characters.
+     *
+     * @return the player characters
+     */
     public List<PlayableCharacter> getPlayerCharacters() {
         return playerCharacters;
     }
 
+    /**
+     * Sets player characters.
+     *
+     * @param playerCharacters the player characters
+     */
     public void setPlayerCharacters(List<PlayableCharacter> playerCharacters) {
         this.playerCharacters = playerCharacters;
     }
+
+    /**
+     * Gets character data.
+     *
+     * @return the character data
+     */
     public CharacterData getCharacterData() {
         return characterData;
     }
 
+    /**
+     * Sets character data.
+     *
+     * @param characterData the character data
+     */
     public void setCharacterData(CharacterData characterData) {
         this.characterData = characterData;
     }
 
+    /**
+     * Gets current main character.
+     *
+     * @return the current main character
+     */
     public PlayableCharacter getCurrentMainCharacter() {
         return currentMainCharacter;
     }
 
+    /**
+     * Sets current main character.
+     *
+     * @param currentMainCharacter the current main character
+     */
     public void setCurrentMainCharacter(PlayableCharacter currentMainCharacter) {
         this.currentMainCharacter = currentMainCharacter;
     }
 
+    /**
+     * Gets inventory items.
+     *
+     * @return the inventory items
+     */
     public List<Item> getInventoryItems() {
         return inventoryItems;
     }
 
+    /**
+     * Sets inventory items.
+     *
+     * @param inventoryItems the inventory items
+     */
     public void setInventoryItems(List<Item> inventoryItems) {
         this.inventoryItems = inventoryItems;
     }
 
+    /**
+     * Gets inventory max weight.
+     *
+     * @return the inventory max weight
+     */
     public int getInventoryMaxWeight() {
         return inventoryMaxWeight;
     }
 
+    /**
+     * Sets inventory max weight.
+     *
+     * @param inventoryMaxWeight the inventory max weight
+     */
     public void setInventoryMaxWeight(int inventoryMaxWeight) {
         this.inventoryMaxWeight = inventoryMaxWeight;
     }
 
+    /**
+     * Gets equipped items by character.
+     *
+     * @return the equipped items by character
+     */
     public Map<String, List<Item>> getEquippedItemsByCharacter() {
         return equippedItemsByCharacter;
     }
 
+    /**
+     * Sets equipped items by character.
+     *
+     * @param equippedItemsByCharacter the equipped items by character
+     */
     public void setEquippedItemsByCharacter(Map<String, List<Item>> equippedItemsByCharacter) {
         this.equippedItemsByCharacter = equippedItemsByCharacter;
     }
 
+    /**
+     * Gets current story progress.
+     *
+     * @return the current story progress
+     */
     public int getCurrentStoryProgress() {
         return currentStoryProgress;
     }
 
+    /**
+     * Sets current story progress.
+     *
+     * @param currentStoryProgress the current story progress
+     */
     public void setCurrentStoryProgress(int currentStoryProgress) {
         this.currentStoryProgress = currentStoryProgress;
     }
 
+    /**
+     * Gets completed quests.
+     *
+     * @return the completed quests
+     */
     public List<String> getCompletedQuests() {
         return completedQuests;
     }
 
+    /**
+     * Sets completed quests.
+     *
+     * @param completedQuests the completed quests
+     */
     public void setCompletedQuests(List<String> completedQuests) {
         this.completedQuests = completedQuests;
     }
 
+    /**
+     * Gets unlocked locations.
+     *
+     * @return the unlocked locations
+     */
     public List<String> getUnlockedLocations() {
         return unlockedLocations;
     }
 
+    /**
+     * Sets unlocked locations.
+     *
+     * @param unlockedLocations the unlocked locations
+     */
     public void setUnlockedLocations(List<String> unlockedLocations) {
         this.unlockedLocations = unlockedLocations;
     }
 
+    /**
+     * Gets pity counter 5 star.
+     *
+     * @return the pity counter 5 star
+     */
     public int getPityCounter5Star() {
         return pityCounter5Star;
     }
 
+    /**
+     * Sets pity counter 5 star.
+     *
+     * @param pityCounter5Star the pity counter 5 star
+     */
     public void setPityCounter5Star(int pityCounter5Star) {
         this.pityCounter5Star = pityCounter5Star;
     }
 
+    /**
+     * Gets pity counter 4 star.
+     *
+     * @return the pity counter 4 star
+     */
     public int getPityCounter4Star() {
         return pityCounter4Star;
     }
 
+    /**
+     * Sets pity counter 4 star.
+     *
+     * @param pityCounter4Star the pity counter 4 star
+     */
     public void setPityCounter4Star(int pityCounter4Star) {
         this.pityCounter4Star = pityCounter4Star;
     }
 
+    /**
+     * Check whether the next pull is a guaranteed 5 star character
+     *
+     * @return the boolean
+     */
     public boolean isGuaranteed5Star() {
         return guaranteed5Star;
     }
 
+    /**
+     * Sets guaranteed 5 star status
+     *
+     * @param guaranteed5Star the guaranteed 5 star
+     */
     public void setGuaranteed5Star(boolean guaranteed5Star) {
         this.guaranteed5Star = guaranteed5Star;
     }
 
+    /**
+     * Gets pull history
+     *
+     * @return the pull history
+     */
     public List<String> getPullHistory() {
         return pullHistory;
     }
 
+    /**
+     * Sets pull history.
+     *
+     * @param pullHistory the pull history
+     */
     public void setPullHistory(List<String> pullHistory) {
         this.pullHistory = pullHistory;
     }
 
+    /**
+     * Gets game settings.
+     *
+     * @return the game settings
+     */
     public GameSettings getGameSettings() {
         return gameSettings;
     }
 
+    /**
+     * Sets game settings.
+     *
+     * @param gameSettings the game settings
+     */
     public void setGameSettings(GameSettings gameSettings) {
         this.gameSettings = gameSettings;
     }
 
+    /**
+     * Gets save date.
+     *
+     * @return the save date
+     */
     public Date getSaveDate() {
         return saveDate;
     }
 
+    /**
+     * Sets save date.
+     *
+     * @param saveDate the save date
+     */
     public void setSaveDate(Date saveDate) {
         this.saveDate = saveDate;
     }
 
+    /**
+     * Gets play time in seconds.
+     *
+     * @return the play time in seconds
+     */
     public long getPlayTimeInSeconds() {
         return playTimeInSeconds;
     }
 
+    /**
+     * Sets play time in seconds.
+     *
+     * @param playTimeInSeconds the play time in seconds
+     */
     public void setPlayTimeInSeconds(long playTimeInSeconds) {
         this.playTimeInSeconds = playTimeInSeconds;
     }
 
+    /**
+     * Gets game version.
+     *
+     * @return the game version
+     */
     public String getGameVersion() {
         return gameVersion;
     }
 
+    /**
+     * Sets game version.
+     *
+     * @param gameVersion the game version
+     */
     public void setGameVersion(String gameVersion) {
         this.gameVersion = gameVersion;
     }
 
     /**
-     * 添加已完成的支线任务
-     * @param questId 支线任务ID
+     * Add completed quest with a specific quest id.
+     *
+     * @param questId the quest id (must match otherwise it might crash)
      */
     public void addCompletedQuest(String questId) {
         if (!completedQuests.contains(questId)) {
@@ -224,17 +395,19 @@ public class GameData implements Serializable {
     }
 
     /**
-     * 检查支线任务是否已完成
-     * @param questId 支线任务ID
-     * @return 是否已完成
+     * Check if a specific quest is completed.
+     *
+     * @param questId the quest id to check
+     * @return the boolean indicating whether the quest is completed
      */
     public boolean isQuestCompleted(String questId) {
         return completedQuests.contains(questId);
     }
 
     /**
-     * 解锁新地点
-     * @param locationId 地点ID
+     * Unlock location with provided name
+     *
+     * @param locationId the location id
      */
     public void unlockLocation(String locationId) {
         if (!unlockedLocations.contains(locationId)) {
@@ -243,63 +416,60 @@ public class GameData implements Serializable {
     }
 
     /**
-     * 检查地点是否已解锁
-     * @param locationId 地点ID
-     * @return 是否已解锁
+     * Check if a location is unlocked.
+     *
+     * @param locationId the location id to check
+     * @return the boolean indicating whether the location is unlocked
      */
     public boolean isLocationUnlocked(String locationId) {
         return unlockedLocations.contains(locationId);
     }
 
     /**
-     * 添加抽卡记录
-     * @param pullRecord 抽卡记录
+     * Add pull record.
+     *
+     * @param pullRecord the pull record
      */
     public void addPullRecord(String pullRecord) {
         pullHistory.add(pullRecord);
-        // 限制历史记录长度，防止过大
         if (pullHistory.size() > 1000) {
             pullHistory = pullHistory.subList(pullHistory.size() - 500, pullHistory.size());
         }
     }
 
     /**
-     * 显示游戏数据摘要
+     * Display summary of the game
      */
     public void displaySummary() {
-        System.out.println("=== 游戏数据摘要 ===");
-        System.out.println("存档时间: " + saveDate);
-        System.out.println("游戏版本: " + gameVersion);
-        System.out.println("主线进度: 第 " + currentStoryProgress + " 章");
-        System.out.println("游戏时长: " + formatPlayTime(playTimeInSeconds));
-        System.out.println("角色数量: " + playerCharacters.size());
-        System.out.println("背包物品: " + inventoryItems.size() + " 个");
-        System.out.println("已完成支线: " + completedQuests.size() + " 个");
-        System.out.println("已解锁地点: " + unlockedLocations.size() + " 个");
-        System.out.println("抽卡历史记录: " + pullHistory.size() + " 条");
+        System.out.println("=== Game Data Summary ===");
+        System.out.println("Save Time: " + saveDate);
+        System.out.println("Game Version: " + gameVersion);
+        System.out.println("Main Story Progress: Chapter " + currentStoryProgress);
+        System.out.println("Play Time: " + formatPlayTime(playTimeInSeconds));
+        System.out.println("Character Count: " + playerCharacters.size());
+        System.out.println("Inventory Items: " + inventoryItems.size() + " items");
+        System.out.println("Completed Side Quests: " + completedQuests.size());
+        System.out.println("Unlocked Locations: " + unlockedLocations.size());
+        System.out.println("Gacha Pull Records: " + pullHistory.size() + " records");
         if (characterData != null) {
-            System.out.println("角色数据: 已加载 (" + characterData.getOwnedCharacters().size() + " 个角色)");
+            System.out.println("Character Data: Loaded (" + characterData.getOwnedCharacters().size() + " characters)");
         } else {
-            System.out.println("角色数据: 未加载");
+            System.out.println("Character Data: Not Loaded");
         }
         System.out.println("====================");
     }
 
-    /**
-     * 格式化游戏时间
-     * @param seconds 总秒数
-     * @return 格式化后的时间字符串
-     */
     private String formatPlayTime(long seconds) {
         long hours = seconds / 3600;
         long minutes = (seconds % 3600) / 60;
         long secs = seconds % 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, secs);
+        String temp = hours + ":" + minutes + ":" + secs;
+        return temp;
     }
 }
 
 /**
- * 游戏设置类
+ * The type Game settings.
  */
 class GameSettings implements Serializable {
     private static final long serialVersionUID = 2L;
@@ -313,6 +483,9 @@ class GameSettings implements Serializable {
     private boolean subtitlesEnabled;
     private String controlScheme;
 
+    /**
+     * Instantiates a new Game settings.
+     */
     public GameSettings() {
         this.volumeMaster = 80;
         this.volumeMusic = 70;
@@ -324,67 +497,147 @@ class GameSettings implements Serializable {
         this.controlScheme = "default";
     }
 
-    // Getter 和 Setter 方法
+    /**
+     * Gets volume master.
+     *
+     * @return the volume master
+     */
+// Getter 和 Setter 方法
     public int getVolumeMaster() {
         return volumeMaster;
     }
 
+    /**
+     * Sets volume master.
+     *
+     * @param volumeMaster the volume master
+     */
     public void setVolumeMaster(int volumeMaster) {
         this.volumeMaster = Math.max(0, Math.min(100, volumeMaster));
     }
 
+    /**
+     * Gets volume music.
+     *
+     * @return the volume music
+     */
     public int getVolumeMusic() {
         return volumeMusic;
     }
 
+    /**
+     * Sets volume music.
+     *
+     * @param volumeMusic the volume music
+     */
     public void setVolumeMusic(int volumeMusic) {
         this.volumeMusic = Math.max(0, Math.min(100, volumeMusic));
     }
 
+    /**
+     * Gets volume sfx.
+     *
+     * @return the volume sfx
+     */
     public int getVolumeSfx() {
         return volumeSfx;
     }
 
+    /**
+     * Sets volume sfx.
+     *
+     * @param volumeSfx the volume sfx
+     */
     public void setVolumeSfx(int volumeSfx) {
         this.volumeSfx = Math.max(0, Math.min(100, volumeSfx));
     }
 
+    /**
+     * Gets language.
+     *
+     * @return the language
+     */
     public String getLanguage() {
         return language;
     }
 
+    /**
+     * Sets language.
+     *
+     * @param language the language
+     */
     public void setLanguage(String language) {
         this.language = language;
     }
 
+    /**
+     * Gets display mode.
+     *
+     * @return the display mode
+     */
     public String getDisplayMode() {
         return displayMode;
     }
 
+    /**
+     * Sets display mode.
+     *
+     * @param displayMode the display mode
+     */
     public void setDisplayMode(String displayMode) {
         this.displayMode = displayMode;
     }
 
+    /**
+     * Gets graphics quality.
+     *
+     * @return the graphics quality
+     */
     public int getGraphicsQuality() {
         return graphicsQuality;
     }
 
+    /**
+     * Sets graphics quality.
+     *
+     * @param graphicsQuality the graphics quality
+     */
     public void setGraphicsQuality(int graphicsQuality) {
         this.graphicsQuality = Math.max(0, Math.min(2, graphicsQuality));
     }
 
+    /**
+     * Is subtitles enabled boolean.
+     *
+     * @return the boolean
+     */
     public boolean isSubtitlesEnabled() {
         return subtitlesEnabled;
     }
 
+    /**
+     * Sets subtitles enabled.
+     *
+     * @param subtitlesEnabled the subtitles enabled
+     */
     public void setSubtitlesEnabled(boolean subtitlesEnabled) {
         this.subtitlesEnabled = subtitlesEnabled;
     }
 
+    /**
+     * Gets control scheme.
+     *
+     * @return the control scheme
+     */
     public String getControlScheme() {
         return controlScheme;
     }
 
+    /**
+     * Sets control scheme.
+     *
+     * @param controlScheme the control scheme
+     */
     public void setControlScheme(String controlScheme) {
         this.controlScheme = controlScheme;
     }
