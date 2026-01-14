@@ -2,6 +2,8 @@ package entities.items;
 import entities.abs.GameEntity;
 import entities.GachaPullable;
 
+import java.io.Serializable;
+
 /**
  * Represents the all items in game, all items have value (in credits), weight, whether it is stackable,
  * and the item type.
@@ -14,7 +16,8 @@ import entities.GachaPullable;
  * @see GameEntity
  * @see GachaPullable
  */
-public abstract class Item extends GameEntity implements GachaPullable {
+public abstract class Item extends GameEntity implements GachaPullable, Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * The Value of the item in game credits
      */

@@ -1,5 +1,7 @@
 package entities.enemies;
 
+import java.io.Serializable;
+
 /**
  * Represents a regular enemy of the game, also includes elite regular enemy.
  * A regular enemy includes a boolean indicating whether they are an elite,
@@ -11,7 +13,9 @@ package entities.enemies;
  * @author Shaoyang Chen
  * @version 1.4.1
  */
-public class RegularEnemy extends Enemy {
+public class RegularEnemy extends Enemy implements Serializable {
+    //added serializable, so now people can save characters to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     private boolean isElite;
     private boolean canCallReinforcements;
 

@@ -1,5 +1,7 @@
 package entities.characters;
 
+import java.io.Serializable;
+
 /**
  * This class represent a five-star playable character (rarest) in the game.
  * Extends {@link PlayableCharacter} with enhanced attributes and special features
@@ -12,7 +14,9 @@ package entities.characters;
  * @version 1.4.1
  * @see PlayableCharacter
  */
-public class FiveStarCharacter extends PlayableCharacter {
+public class FiveStarCharacter extends PlayableCharacter implements Serializable {
+    //added serializable, so now people can save characters to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     private String signatureWeapon;
     private String ultimateAnimation;
 
