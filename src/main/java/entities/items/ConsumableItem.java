@@ -1,5 +1,7 @@
 package entities.items;
 
+import java.io.Serializable;
+
 /**
  * Represents a type consumable item, usually will be a potion or effect.
  * Consumable items have 2 parameters, one is uses remaining, one is effect duration.
@@ -11,7 +13,9 @@ package entities.items;
  *
  * @see Item
  */
-public class ConsumableItem extends Item {
+public class ConsumableItem extends Item implements Serializable {
+    //added serializable, so now people can save items to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     private int usesRemaining;
     private int effectDuration;
 

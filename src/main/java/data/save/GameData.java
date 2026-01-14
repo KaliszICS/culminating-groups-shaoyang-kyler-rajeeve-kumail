@@ -1,5 +1,6 @@
 package data.save;
 
+import data.CharacterData;
 import entities.characters.*;
 import entities.items.*;
 import entities.equipment.*;
@@ -17,7 +18,8 @@ public class GameData implements Serializable {
     // 玩家信息
     private List<PlayableCharacter> playerCharacters;
     private PlayableCharacter currentMainCharacter;
-
+    // 添加 CharacterData 引用
+    private CharacterData characterData;
     // 背包数据
     private List<Item> inventoryItems;
     private int inventoryMaxWeight;
@@ -60,15 +62,13 @@ public class GameData implements Serializable {
         this.pityCounter5Star = 0;
         this.pityCounter4Star = 0;
         this.guaranteed5Star = false;
+        this.characterData = null;
     }
 
     /**
      * 完整构造函数
      */
-    public GameData(List<PlayableCharacter> playerCharacters,
-                    List<Item> inventoryItems,
-                    int currentStoryProgress,
-                    long playTimeInSeconds) {
+    public GameData(List<PlayableCharacter> playerCharacters, List<Item> inventoryItems, int currentStoryProgress, long playTimeInSeconds) {
         this();
         this.playerCharacters = playerCharacters;
         this.inventoryItems = inventoryItems;
@@ -84,6 +84,13 @@ public class GameData implements Serializable {
 
     public void setPlayerCharacters(List<PlayableCharacter> playerCharacters) {
         this.playerCharacters = playerCharacters;
+    }
+    public CharacterData getCharacterData() {
+        return characterData;
+    }
+
+    public void setCharacterData(CharacterData characterData) {
+        this.characterData = characterData;
     }
 
     public PlayableCharacter getCurrentMainCharacter() {
@@ -270,6 +277,11 @@ public class GameData implements Serializable {
         System.out.println("已完成支线: " + completedQuests.size() + " 个");
         System.out.println("已解锁地点: " + unlockedLocations.size() + " 个");
         System.out.println("抽卡历史记录: " + pullHistory.size() + " 条");
+        if (characterData != null) {
+            System.out.println("角色数据: 已加载 (" + characterData.getOwnedCharacters().size() + " 个角色)");
+        } else {
+            System.out.println("角色数据: 未加载");
+        }
         System.out.println("====================");
     }
 

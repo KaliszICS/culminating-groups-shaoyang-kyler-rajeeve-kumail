@@ -1,9 +1,13 @@
 package entities.equipment;
 
+import java.io.Serializable;
+
 /**
  * The type Light cone.
  */
-public class LightCone extends Equipment {
+public class LightCone extends Equipment implements Serializable {
+    //added serializable, so now people can save items to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     private String pathAlignment; // paths
     private String[] abilities;
 

@@ -3,6 +3,8 @@ package entities.characters;
 import entities.abs.BattleUnit;
 import entities.equipment.*;
 
+import java.io.Serializable;
+
 /**
  * Represents a character entity in the game
  * level progression, equipment management, and skill development are included in all characters
@@ -12,7 +14,9 @@ import entities.equipment.*;
  * @see BattleUnit
  * @see Equipment
  */
-public class Character extends BattleUnit {
+public class Character extends BattleUnit implements Serializable {
+    //added serializable, so now people can save characters to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     /**
      * The Level.
      */
@@ -238,7 +242,9 @@ public class Character extends BattleUnit {
      * Each character has a skill tree with 5 skills.
      * The first skill is unlocked by default.
      */
-    public class SkillTree {
+    public class SkillTree implements Serializable {
+        //added serializable, so now people can save SkillTree to a file (updated on 2026/1/13 emergency update)
+        private static final long serialVersionUID = 1L;
         private boolean[] unlockedSkills;
 
         /**

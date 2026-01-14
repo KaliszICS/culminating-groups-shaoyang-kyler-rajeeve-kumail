@@ -3,6 +3,8 @@ package entities.characters;
 import entities.abs.BattleUnit;
 import entities.equipment.Equipment;
 
+import java.io.Serializable;
+
 /**
  * This class describes a playable character, with a boolean of whether the class can be controlled by a player,
  * friendship level, also inherited from the parent class: {@link Character}
@@ -12,7 +14,9 @@ import entities.equipment.Equipment;
  * @see BattleUnit
  * @see Equipment
  */
-public class PlayableCharacter extends Character {
+public class PlayableCharacter extends Character implements Serializable {
+    //added serializable, so now people can save characters to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     /**
      * Is player controllable?
      */

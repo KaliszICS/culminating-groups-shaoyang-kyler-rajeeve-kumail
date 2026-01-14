@@ -5,8 +5,14 @@ import data.config.ConfigManager;
 import data.save.GameData;
 import data.save.SaveManager;
 import entities.characters.Character;
+import entities.characters.FiveStarCharacter;
+import entities.enemies.BossEnemy;
+import entities.enemies.Enemy;
+import systems.battle.BattleSystem;
+import entities.enemies.RegularEnemy;
 import entities.equipment.Equipment;
 import entities.items.Item;
+import systems.battle.Damage;
 import systems.gacha.GachaSystem;
 import systems.inventory.Inventory;
 import util.fileio.FileHandler;
@@ -24,6 +30,7 @@ public class GamePlay {
     private Scanner scanner;
     private boolean gameRunning;
     private Random random;
+    private BattleSystem battleSystem;
 
     // ASCII Art
     private static final String LOGO =
@@ -48,6 +55,7 @@ public class GamePlay {
         this.playerInventory = new Inventory(1000);
         this.saveManager = new SaveManager();
         this.currentGameData = new GameData();
+        this.battleSystem = new BattleSystem();
 
         loadGameData();
         System.out.println("Game initialized!");
@@ -62,6 +70,8 @@ public class GamePlay {
             if (saves.isEmpty()) {
                 System.out.println("No save files found. Starting new game...");
                 characterData = new CharacterData();
+                currentGameData = new GameData();
+                currentGameData.setCharacterData(characterData);
             } else {
                 System.out.println("Available saves:");
                 for (int i = 0; i < saves.size(); i++) {
@@ -72,21 +82,36 @@ public class GamePlay {
                     int slot = Integer.parseInt(scanner.nextLine());
                     currentGameData = saveManager.loadGame(slot);
                     if (currentGameData != null) {
+                        // Fixed Character Data properly install. update: 2026/1/13
+                        characterData = currentGameData.getCharacterData();
+                        if (characterData == null) {
+                            System.out.println("Warning: No character data found in save. Initializing new character data...");
+                            characterData = new CharacterData();
+                            currentGameData.setCharacterData(characterData);
+                        }
                         System.out.println("Game loaded successfully!");
+                        System.out.println("Loaded " + characterData.getOwnedCharacters().size() + " characters");
                     } else {
                         System.out.println("Failed to load save. Starting new game...");
                         characterData = new CharacterData();
+                        currentGameData = new GameData();
+                        currentGameData.setCharacterData(characterData);
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input. Starting new game...");
                     characterData = new CharacterData();
+                    currentGameData = new GameData();
+                    currentGameData.setCharacterData(characterData);
                 }
             }
         } else {
             System.out.println("Starting new game...");
             characterData = new CharacterData();
+            currentGameData = new GameData();
+            currentGameData.setCharacterData(characterData);
         }
     }
+
 
     public void start() {
         clearScreen();
@@ -336,9 +361,6 @@ public class GamePlay {
 
         System.out.print("Enter equipment name: ");
         String equipName = scanner.nextLine();
-
-        // In a real implementation, you would search for the equipment
-        // For now, we'll create a dummy equipment
         Equipment dummyEquip = new Equipment(equipName, "Weapon", 1) {
             @Override
             public void calculateStats() {
@@ -430,13 +452,12 @@ public class GamePlay {
             playerInventory.addItem(item);
         }
     }
-
     private void battleMenu() {
         clearScreen();
         System.out.println("=== BATTLE SIMULATION ===");
-        System.out.println("1. Easy Difficulty");
-        System.out.println("2. Normal Difficulty");
-        System.out.println("3. Hard Difficulty");
+        System.out.println("1. Easy Difficulty (Regular Enemies)");
+        System.out.println("2. Normal Difficulty (Elite Enemies)");
+        System.out.println("3. Hard Difficulty (Boss Enemy)");
         System.out.println("4. Return to Main Menu");
 
         System.out.print("Select difficulty: ");
@@ -454,33 +475,194 @@ public class GamePlay {
         System.out.println("\n=== BATTLE START ===");
 
         System.out.println("Select characters for battle...");
-        List<String> selectedChars = selectCharacters();
+        List<Character> selectedChars = selectCharactersForBattle();
 
         if (selectedChars.isEmpty()) {
             System.out.println("No characters selected!");
             return;
         }
 
-        System.out.println("Battle starting with: " + selectedChars);
+        System.out.println("\nBattle starting with:");
+        for (Character character : selectedChars) {
+            System.out.println("  - " + character.getName() + " (HP: " +
+                    character.getCurrentHP() + "/" + character.getMaxHP() + ")");
+        }
+
         pause(2);
 
-        boolean victory = simulateBattle(selectedChars, difficulty);
+        // Create enemies based on difficulty
+        List<Enemy> enemies = createEnemies(difficulty);
+
+        System.out.println("\nEnemies encountered:");
+        for (Enemy enemy : enemies) {
+            System.out.println("  - " + enemy.getName() + " (HP: " +
+                    enemy.getCurrentHP() + "/" + enemy.getMaxHP() + ")");
+        }
+
+        pause(2);
+
+        // Initialize battle
+        battleSystem.initializeBattle(selectedChars, enemies);
+
+        // Start battle loop
+        boolean battleInProgress = true;
+        int turnCount = 1;
+
+        while (battleInProgress) {
+            clearScreen();
+            System.out.println("=== TURN " + turnCount + " ===");
+            System.out.println("=======================");
+
+            // Display battle status
+            displayBattleStatus(selectedChars, enemies);
+
+            System.out.println("\n=== PLAYER TURN ===");
+            // Player characters take action
+            for (Character character : selectedChars) {
+                if (character.isAlive()) {
+                    System.out.println("\n" + character.getName() + "'s turn:");
+                    System.out.println("1. Basic Attack");
+                    System.out.println("2. Use Skill");
+                    if (character instanceof FiveStarCharacter) {
+                        System.out.println("3. Use Ultimate");
+                    }
+
+                    System.out.print("Select action: ");
+                    String action = scanner.nextLine();
+
+                    switch (action) {
+                        case "1":
+                            performBasicAttack(character, enemies);
+                            break;
+                        case "2":
+                            character.useSkill();
+                            // For simplicity, apply damage to first alive enemy
+                            Enemy target = getFirstAliveEnemy(enemies);
+                            if (target != null) {
+                                int damage = calculatePlayerDamage(character, target);
+                                target.takeDamage(damage);
+                                System.out.println(character.getName() + " used skill on " +
+                                        target.getName() + " for " + damage + " damage!");
+                            }
+                            break;
+                        case "3":
+                            if (character instanceof FiveStarCharacter) {
+                                ((FiveStarCharacter) character).useUltimate();
+                                Enemy ultTarget = getFirstAliveEnemy(enemies);
+                                if (ultTarget != null) {
+                                    int damage = character.getAttack() * 7;
+                                    ultTarget.takeDamage(damage);
+                                    System.out.println(character.getName() + "'s ultimate hit " +
+                                            ultTarget.getName() + " for " + damage + " damage!");
+                                }
+                            }
+                            break;
+                        default:
+                            System.out.println("Invalid action, using basic attack!");
+                            performBasicAttack(character, enemies);
+                    }
+
+                    // Check if battle ended
+                    if (checkBattleEnd(enemies)) {
+                        battleInProgress = false;
+                        break;
+                    }
+
+                    pause(1);
+                }
+            }
+
+            if (!battleInProgress) {
+                break;
+            }
+
+            System.out.println("\n=== ENEMY TURN ===");
+            // Enemies take action
+            for (Enemy enemy : enemies) {
+                if (enemy.isAlive()) {
+                    System.out.println("\n" + enemy.getName() + "'s turn:");
+                    enemy.useSkill();
+
+                    // Enemy attacks a random player character
+                    Character target = getRandomAliveCharacter(selectedChars);
+                    if (target != null) {
+                        int damage = calculateEnemyDamage(enemy, target);
+                        target.takeDamage(damage);
+                        System.out.println(enemy.getName() + " attacked " +
+                                target.getName() + " for " + damage + " damage!");
+
+                        // Check if character died
+                        if (!target.isAlive()) {
+                            System.out.println(target.getName() + " has been defeated!");
+                        }
+                    }
+
+                    // Check if battle ended
+                    if (checkBattleEnd(selectedChars)) {
+                        battleInProgress = false;
+                        break;
+                    }
+
+                    pause(1);
+                }
+            }
+
+            // Check for phase transitions (for boss enemies)
+            for (Enemy enemy : enemies) {
+                if (enemy instanceof BossEnemy) {
+                    BossEnemy boss = (BossEnemy) enemy;
+                    // Boss automatically transitions phase when HP is low
+                    if (boss.hasPhases() && boss.getCurrentHP() < boss.getMaxHP() / 2) {
+                        boss.transitionPhase();
+                    }
+                }
+            }
+
+            // Apply end-of-turn effects (healing, etc.)
+            applyEndOfTurnEffects(selectedChars);
+
+            turnCount++;
+
+            System.out.println("\nPress Enter to continue to next turn...");
+            scanner.nextLine();
+        }
+
+        // Battle result
+        boolean victory = checkBattleEnd(enemies);
 
         if (victory) {
-            System.out.println("\nBattle Victory!");
+            System.out.println("\n=== BATTLE VICTORY! ===");
             int creditReward = 1000 * difficulty;
-            int expReward = 50 * difficulty;
+            int expReward = 100 * difficulty;
 
             characterData.addCredits(creditReward);
             System.out.println("Earned " + creditReward + " credits");
 
-            for (String charName : selectedChars) {
-                characterData.levelUpCharacter(charName, expReward);
+            for (Character character : selectedChars) {
+                if (character.isAlive()) {
+                    characterData.levelUpCharacter(character.getName(), expReward);
+                    System.out.println(character.getName() + " gained " + expReward + " EXP");
+                }
+            }
+
+            // Calculate drops from defeated enemies
+            for (Enemy enemy : enemies) {
+                if (!enemy.isAlive()) {
+                    Item drop = enemy.calculateDrop();
+                    if (drop != null) {
+                        playerInventory.addItem(drop);
+                        System.out.println("Obtained: " + drop.getName());
+                    }
+                }
             }
 
             characterData.recordBattle(true);
         } else {
-            System.out.println("\nBattle Defeat!");
+            System.out.println("\n=== BATTLE DEFEAT! ===");
+            // Heal all characters to full after defeat
+            for (Character character : selectedChars) {
+                character.setCurrentHP(character.getMaxHP());
+            }
             characterData.recordBattle(false);
         }
 
@@ -488,58 +670,326 @@ public class GamePlay {
         scanner.nextLine();
     }
 
-    private List<String> selectCharacters() {
-        Map<String, Character> characters = characterData.getOwnedCharacters();
-        List<String> selected = new ArrayList<>();
+    private List<Character> selectCharactersForBattle() {
+        Map<String, Character> allCharacters = characterData.getOwnedCharacters();
+        List<Character> selected = new ArrayList<>();
+        List<String> characterNames = new ArrayList<>(allCharacters.keySet());
 
-        while (selected.size() < 4 && selected.size() < characters.size()) {
-            System.out.println("Current selection: " + selected);
-            System.out.println("Available characters:");
+        while (selected.size() < 4 && selected.size() < allCharacters.size()) {
+            clearScreen();
+            System.out.println("=== SELECT CHARACTERS FOR BATTLE ===");
+            System.out.println("Current selection: " + selected.size() + "/4");
 
-            List<String> available = new ArrayList<>();
-            int i = 1;
-            for (String charName : characters.keySet()) {
-                if (!selected.contains(charName)) {
-                    System.out.println(i + ". " + charName);
-                    available.add(charName);
-                    i++;
+            for (int i = 0; i < selected.size(); i++) {
+                Character c = selected.get(i);
+                System.out.println((i + 1) + ". " + c.getName() +
+                        " (Lvl " + c.getLevel() + ", HP: " +
+                        c.getCurrentHP() + "/" + c.getMaxHP() + ")");
+            }
+
+            System.out.println("\nAvailable characters:");
+            int optionNum = 1;
+            Map<Integer, String> optionMap = new HashMap<>();
+
+            for (String charName : characterNames) {
+                if (!isCharacterSelected(selected, charName)) {
+                    Character c = allCharacters.get(charName);
+                    System.out.println(optionNum + ". " + charName +
+                            " (Lvl " + c.getLevel() + ", HP: " +
+                            c.getCurrentHP() + "/" + c.getMaxHP() + ")");
+                    optionMap.put(optionNum, charName);
+                    optionNum++;
                 }
             }
 
-            System.out.println(i + ". Done selecting");
+            System.out.println(optionNum + ". Start Battle");
+            System.out.println((optionNum + 1) + ". Clear Selection");
 
-            System.out.print("Select character: ");
+            System.out.print("\nSelect option: ");
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
 
-                if (choice == i) {
+                if (choice == optionNum) {
                     break;
-                } else if (choice > 0 && choice < i) {
-                    selected.add(available.get(choice - 1));
+                } else if (choice == optionNum + 1) {
+                    selected.clear();
+                } else if (choice > 0 && choice < optionNum) {
+                    String selectedName = optionMap.get(choice);
+                    Character selectedChar = allCharacters.get(selectedName);
+                    selected.add(selectedChar);
                 } else {
                     System.out.println("Invalid choice!");
+                    pause(1);
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number!");
+                pause(1);
             }
         }
 
         return selected;
     }
 
-    private boolean simulateBattle(List<String> selectedChars, int difficulty) {
-        double winChance = 0.7 - (difficulty * 0.1);
-
-        int totalLevel = 0;
-        for (String charName : selectedChars) {
-            totalLevel += characterData.getCharacterLevels().getOrDefault(charName, 1);
+    private boolean isCharacterSelected(List<Character> selected, String name) {
+        for (Character c : selected) {
+            if (c.getName().equals(name)) {
+                return true;
+            }
         }
-        double levelBonus = totalLevel / (selectedChars.size() * 20.0);
-
-        winChance += Math.min(levelBonus, 0.3);
-
-        return random.nextDouble() < winChance;
+        return false;
     }
+
+    private List<Enemy> createEnemies(int difficulty) {
+        List<Enemy> enemies = new ArrayList<>();
+
+        switch (difficulty) {
+            case 1: // Easy - Regular enemies
+                enemies.add(new RegularEnemy("Mara-Struck Soldier", false));
+                enemies.add(new RegularEnemy("Fragmentum Monster", false));
+                break;
+            case 2: // Normal - Elite enemies
+                enemies.add(new RegularEnemy("Elite Automaton", true));
+                enemies.add(new RegularEnemy("Voidranger", false));
+                enemies.add(new RegularEnemy("Silvermane Guard", false));
+                break;
+            case 3: // Hard - Boss enemy
+                BossEnemy boss = new BossEnemy("Cocolia, Mother of Deception", 3);
+                enemies.add(boss);
+                break;
+        }
+
+        return enemies;
+    }
+
+    private void displayBattleStatus(List<Character> players, List<Enemy> enemies) {
+        System.out.println("=== PLAYERS ===");
+        for (Character player : players) {
+            String status = player.isAlive() ?
+                    "HP: " + player.getCurrentHP() + "/" + player.getMaxHP() :
+                    "DEFEATED";
+            System.out.println(player.getName() + " [" + status + "]");
+        }
+
+        System.out.println("\n=== ENEMIES ===");
+        for (Enemy enemy : enemies) {
+            String status = enemy.isAlive() ?
+                    "HP: " + enemy.getCurrentHP() + "/" + enemy.getMaxHP() :
+                    "DEFEATED";
+            String extraInfo = "";
+            if (enemy instanceof BossEnemy) {
+                BossEnemy boss = (BossEnemy) enemy;
+                extraInfo = " (Phase " + boss.getCurrentPhase() + ")";
+            } else if (enemy instanceof RegularEnemy) {
+                RegularEnemy reg = (RegularEnemy) enemy;
+                if (reg.isElite()) {
+                    extraInfo = " (Elite)";
+                }
+            }
+            System.out.println(enemy.getName() + extraInfo + " [" + status + "]");
+        }
+    }
+
+    private void performBasicAttack(Character attacker, List<Enemy> enemies) {
+        Enemy target = getFirstAliveEnemy(enemies);
+        if (target != null) {
+            int damage = calculatePlayerDamage(attacker, target);
+            target.takeDamage(damage);
+            System.out.println(attacker.getName() + " attacked " +
+                    target.getName() + " for " + damage + " damage!");
+
+            if (!target.isAlive()) {
+                System.out.println(target.getName() + " has been defeated!");
+            }
+        }
+    }
+
+    private int calculatePlayerDamage(Character attacker, Enemy defender) {
+        // Simple damage calculation using the Damage class
+        double critRate = 0.05; // Base 5% crit rate
+        double critDamage = 0.5; // Base 50% crit damage
+
+        // Could be enhanced with equipment bonuses
+        return Damage.compute(attacker.getAttack(), defender.getDefense(), critRate, critDamage);
+    }
+
+    private int calculateEnemyDamage(Enemy attacker, Character defender) {
+        // Simple damage calculation for enemies
+        double critRate = 0.05;
+        double critDamage = 0.5;
+
+        return Damage.compute(attacker.getAttack(), defender.getDefense(), critRate, critDamage);
+    }
+
+    private Enemy getFirstAliveEnemy(List<Enemy> enemies) {
+        for (Enemy enemy : enemies) {
+            if (enemy.isAlive()) {
+                return enemy;
+            }
+        }
+        return null;
+    }
+
+    private Character getRandomAliveCharacter(List<Character> characters) {
+        List<Character> aliveCharacters = new ArrayList<>();
+        for (Character character : characters) {
+            if (character.isAlive()) {
+                aliveCharacters.add(character);
+            }
+        }
+
+        if (aliveCharacters.isEmpty()) {
+            return null;
+        }
+
+        int index = random.nextInt(aliveCharacters.size());
+        return aliveCharacters.get(index);
+    }
+
+    private boolean checkBattleEnd(List<?> team) {
+        if (team.get(0) instanceof Enemy) {
+            List<Enemy> enemies = (List<Enemy>) team;
+            for (Enemy enemy : enemies) {
+                if (enemy.isAlive()) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (team.get(0) instanceof Character) {
+            List<Character> characters = (List<Character>) team;
+            for (Character character : characters) {
+                if (character.isAlive()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void applyEndOfTurnEffects(List<Character> characters) {
+        // Apply small end-of-turn healing to alive characters
+        for (Character character : characters) {
+            if (character.isAlive()) {
+                int healAmount = character.getMaxHP() / 20; // 5% healing per turn
+                int newHP = Math.min(character.getCurrentHP() + healAmount, character.getMaxHP());
+                if (newHP > character.getCurrentHP()) {
+                    character.setCurrentHP(newHP);
+                    System.out.println(character.getName() + " recovered " +
+                            (newHP - character.getCurrentHP()) + " HP at end of turn");
+                }
+            }
+        }
+    }
+
+//    private void battleMenu() {
+//        clearScreen();
+//        System.out.println("=== BATTLE SIMULATION ===");
+//        System.out.println("1. Easy Difficulty");
+//        System.out.println("2. Normal Difficulty");
+//        System.out.println("3. Hard Difficulty");
+//        System.out.println("4. Return to Main Menu");
+//
+//        System.out.print("Select difficulty: ");
+//        String choice = scanner.nextLine();
+//
+//        if (choice.matches("[1-3]")) {
+//            int difficulty = Integer.parseInt(choice);
+//            startBattle(difficulty);
+//        } else if (!choice.equals("4")) {
+//            System.out.println("Invalid choice!");
+//        }
+//    }
+//
+//    private void startBattle(int difficulty) {
+//        System.out.println("\n=== BATTLE START ===");
+//
+//        System.out.println("Select characters for battle...");
+//        List<String> selectedChars = selectCharacters();
+//
+//        if (selectedChars.isEmpty()) {
+//            System.out.println("No characters selected!");
+//            return;
+//        }
+//
+//        System.out.println("Battle starting with: " + selectedChars);
+//        pause(2);
+//
+//        boolean victory = simulateBattle(selectedChars, difficulty);
+//
+//        if (victory) {
+//            System.out.println("\nBattle Victory!");
+//            int creditReward = 1000 * difficulty;
+//            int expReward = 50 * difficulty;
+//
+//            characterData.addCredits(creditReward);
+//            System.out.println("Earned " + creditReward + " credits");
+//
+//            for (String charName : selectedChars) {
+//                characterData.levelUpCharacter(charName, expReward);
+//            }
+//
+//            characterData.recordBattle(true);
+//        } else {
+//            System.out.println("\nBattle Defeat!");
+//            characterData.recordBattle(false);
+//        }
+//
+//        System.out.println("\nPress Enter to continue...");
+//        scanner.nextLine();
+//    }
+//
+//    private List<String> selectCharacters() {
+//        Map<String, Character> characters = characterData.getOwnedCharacters();
+//        List<String> selected = new ArrayList<>();
+//
+//        while (selected.size() < 4 && selected.size() < characters.size()) {
+//            System.out.println("Current selection: " + selected);
+//            System.out.println("Available characters:");
+//
+//            List<String> available = new ArrayList<>();
+//            int i = 1;
+//            for (String charName : characters.keySet()) {
+//                if (!selected.contains(charName)) {
+//                    System.out.println(i + ". " + charName);
+//                    available.add(charName);
+//                    i++;
+//                }
+//            }
+//
+//            System.out.println(i + ". Done selecting");
+//
+//            System.out.print("Select character: ");
+//            try {
+//                int choice = Integer.parseInt(scanner.nextLine());
+//
+//                if (choice == i) {
+//                    break;
+//                } else if (choice > 0 && choice < i) {
+//                    selected.add(available.get(choice - 1));
+//                } else {
+//                    System.out.println("Invalid choice!");
+//                }
+//            } catch (NumberFormatException e) {
+//                System.out.println("Please enter a number!");
+//            }
+//        }
+//
+//        return selected;
+//    }
+//
+//    private boolean simulateBattle(List<String> selectedChars, int difficulty) {
+//        double winChance = 0.7 - (difficulty * 0.1);
+//
+//        int totalLevel = 0;
+//        for (String charName : selectedChars) {
+//            totalLevel += characterData.getCharacterLevels().getOrDefault(charName, 1);
+//        }
+//        double levelBonus = totalLevel / (selectedChars.size() * 20.0);
+//
+//        winChance += Math.min(levelBonus, 0.3);
+//
+//        return random.nextDouble() < winChance;
+//    }
 
     private void inventoryMenu() {
         clearScreen();
@@ -707,9 +1157,15 @@ public class GamePlay {
     }
 
     private void saveGame() {
+        // added: character data now saves into gameData.
+        // (prevent nullpointer when loading a game, since previously characterdata isn't saved, causing a nullpointer when using "character" classes and methods)
+        currentGameData.setCharacterData(characterData);
+        currentGameData.setSaveDate(new Date());
+
         boolean success = saveManager.saveGame(currentGameData);
         if (success) {
             System.out.println("Game saved successfully!");
+            System.out.println("Saved " + characterData.getOwnedCharacters().size() + " characters");
         } else {
             System.out.println("Failed to save game!");
         }
@@ -733,7 +1189,15 @@ public class GamePlay {
             int slot = Integer.parseInt(scanner.nextLine());
             currentGameData = saveManager.loadGame(slot);
             if (currentGameData != null) {
+                // Character data should be loaded right now
+                characterData = currentGameData.getCharacterData();
+                if (characterData == null) {
+                    System.out.println("Warning: No character data found in save. Initializing new character data...");
+                    characterData = new CharacterData();
+                    currentGameData.setCharacterData(characterData);
+                }
                 System.out.println("Game loaded successfully!");
+                System.out.println("Loaded " + characterData.getOwnedCharacters().size() + " characters");
             } else {
                 System.out.println("Failed to load save!");
             }

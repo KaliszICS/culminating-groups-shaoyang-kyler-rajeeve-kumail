@@ -1,5 +1,7 @@
 package entities.items;
 
+import java.io.Serializable;
+
 /**
  * Represents all material items in game.
  * Inherited from {@link Item} therefore they have shared attributes.
@@ -10,7 +12,9 @@ package entities.items;
  * 
  * @see Item
  */
-public class MaterialItem extends Item {
+public class MaterialItem extends Item implements Serializable {
+    //added serializable, so now people can save items to a file (updated on 2026/1/13 emergency update)
+    private static final long serialVersionUID = 1L;
     private String materialType;
     private int rarity; // 1-5
 
