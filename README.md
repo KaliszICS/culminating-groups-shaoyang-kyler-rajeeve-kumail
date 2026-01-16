@@ -18,12 +18,11 @@ Save Package | :heavy_check_mark: | Kyler
 FileIO Package | :heavy_check_mark: | Rajeeve
 Algorithms Package | :heavy_check_mark: | Rajeeve
 Character Data | :heavy_check_mark: | Done
-Gameplay | :factory_worker:  | Not Assigned Yet
+Gameplay | :heavy_check_mark:  | Done
 
 Legend
-- :white_check_mark: Means 100% completed
 
-- :heavy_check_mark: Means mostly completed with minor updates left
+- :heavy_check_mark: Means completed
 
 - :factory_worker: Means work in progress
 
