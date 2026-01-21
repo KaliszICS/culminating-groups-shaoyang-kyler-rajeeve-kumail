@@ -1,0 +1,8 @@
+Saving does not appear to work.  Always fails.
+You have a lot interactions that rely on people typing in names.  Not only is this difficult but making the name match identically (including casing) is a bad way to design choices (especially when they can't see the names on their screen).
+I would advise to use a more menu based system in the future to see the item and select it by a number instead of a name.
+Also having some sort of more comprehensive instruction system for the game would help a lot.  It is difficult to follow how to make your characters stronger as levelling them up does not increase their hp or stats in any way that I can see so levelling seems pointless.  Also your level up option seems to have no limit? I can just level something up as many times as I want based on a number.
+Your gameplay file seems like it could be broken up a little bit more into sections which would be easier to follow.
+Javadocs should be a bit more specific. Remember that this is for people who are programming, so they should be able to figure out what it does without looking at the source code. Also remember to avoid bad variable names (especially in parameters since these appear in your java docs)
+
+87%
